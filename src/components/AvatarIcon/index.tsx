@@ -16,20 +16,14 @@ export const AvatarIcon: React.FC<{ who: string }> = ({ who }) => {
       return;
     }
     // https://sbfl.net/blog/2019/01/07/javascript-audio-spectrum/
-    //const spectrum: number[] = [
-    //230, 100, 140, 100, 230, 100, 140, 100, 230, 100, 140, 100, 230, 100, 140,
-    //100, 230, 100, 140, 130, 230, 100, 140, 130,
-    //];
     const spectrum = Array.from({ length: 24 }, () =>
       Math.floor(Math.random() * (230 - 50 + 1) + 50)
     );
-    console.log(spectrum.length);
     // canvasの中心座標
     const center = {
       x: Math.round(canvas.width / 2),
       y: Math.round(canvas.height / 2),
     };
-
     // canvasの幅を均等に割り振る
     // 円なので360度（2π）を分割する
     const barRad = (2 * Math.PI) / spectrum.length;
