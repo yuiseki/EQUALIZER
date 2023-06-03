@@ -122,9 +122,9 @@ export default function Home() {
       },
       true
     );
-    setResponding(true);
 
     /*
+    setResponding(true);
     setRequesting(true);
     const innerRes = await nextPostJson("/api/inner", {
       pastMessages: JSON.stringify(surfaceResJson.history),
@@ -185,9 +185,7 @@ export default function Home() {
         <TextInput
           textareaRef={textareaRef}
           disabled={responding || lazyInserting}
-          placeholder={
-            "文字をすごく大きくして。背景を虹色にして。アイコンを回転させて。"
-          }
+          placeholder={"こんにちは。今日の議題はなんですか？"}
           inputText={inputText}
           setInputText={setInputText}
           onSubmit={onSubmit}
