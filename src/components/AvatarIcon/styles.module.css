@@ -54,7 +54,7 @@
   border-radius: calc(2 * var(--gamingBorderWidth));
   z-index: -10;
   background-size: 600% 600%;
-  animation: gaming-rainbow-background 10s ease infinite;
+  animation: gaming-rainbow-background 5s ease infinite;
 }
 
 .avatarIconHuman {
