@@ -189,7 +189,6 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      <h1>EQUALIZER</h1>
       <div
         className="dialogueListWrap"
         style={{
