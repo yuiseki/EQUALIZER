@@ -14,6 +14,49 @@
   background: rgb(0, 158, 219);
 }
 
+@keyframes gaming-rainbow-background {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.avatarIconAssistantIcon {
+  width: 30px;
+  height: 30px;
+  --gamingBorderWidth: 1px;
+  position: relative !important;
+  border: none !important;
+  border-radius: var(--gamingBorderWidth) !important;
+  z-index: 100;
+}
+.avatarIconAssistantIcon:after {
+  content: "";
+  position: absolute;
+  top: calc(-1 * var(--gamingBorderWidth) * 2);
+  left: calc(-1 * var(--gamingBorderWidth) * 2);
+  height: calc(100% + var(--gamingBorderWidth) * 4);
+  width: calc(100% + var(--gamingBorderWidth) * 4);
+  background: linear-gradient(
+    to right,
+    red,
+    orange,
+    yellow,
+    green,
+    aqua,
+    blue,
+    purple
+  );
+  border-radius: calc(2 * var(--gamingBorderWidth));
+  z-index: -10;
+  background-size: 600% 600%;
+  animation: gaming-rainbow-background 10s ease infinite;
+}
+
 .avatarIconHuman {
   border: 2px solid rgba(96, 104, 124, 0.6);
   background: rgba(209, 209, 209, 0.4);

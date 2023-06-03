@@ -12,6 +12,12 @@
   backdrop-filter: blur(2px);
 }
 
+.avatarIconWrap {
+  display: flex;
+  justify-items: center;
+  flex-shrink: 0;
+}
+
 @media screen and (max-width: 600px) {
   .dialogueElementView {
     gap: 6px;

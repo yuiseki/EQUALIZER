@@ -17,14 +17,7 @@ export const DialogueElementView: React.FC<{
       }`}
       key={dialogueIndex}
     >
-      <div
-        className="avatarIconWrap"
-        style={{
-          display: "flex",
-          justifyItems: "center",
-          flexShrink: 0,
-        }}
-      >
+      <div className="avatarIconWrap">
         <AvatarIcon who={dialogueElement.who} />
       </div>
       <div className="dialogueElementWrap">
