@@ -10,7 +10,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import styles from "./page.module.css";
 
-const greetings = `Hello! I'm EQUALIZER, ...`;
+const greetings = `Hello! I'm EQUALIZER, an Interactive deliberation facilitating and humanity inclusion support system.`;
 
 export default function Home() {
   const [requesting, setRequesting] = useState(false);
