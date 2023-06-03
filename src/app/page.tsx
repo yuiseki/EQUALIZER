@@ -10,7 +10,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import styles from "./page.module.css";
 
-const greetings = `こんにちは！私は対話型熟議促進人類包摂支援システム「イコライザー」です。重要な熟議に協力していただけませんか？`;
+const greetings = `こんにちは！私は対話型熟議促進人類包摂支援システム「イコライザー」です。重要な議論に、ぜひ参加していただけませんか？`;
 
 export default function Home() {
   const [requesting, setRequesting] = useState(false);
