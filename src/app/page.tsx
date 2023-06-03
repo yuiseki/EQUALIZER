@@ -124,6 +124,7 @@ export default function Home() {
     );
     setResponding(true);
 
+    /*
     setRequesting(true);
     const innerRes = await nextPostJson("/api/inner", {
       pastMessages: JSON.stringify(surfaceResJson.history),
@@ -134,6 +135,7 @@ export default function Home() {
     // TODO: request to /api/deep
     setResponding(false);
     setRequesting(false);
+    */
   }, [inputText, insertNewDialogue, pastMessages]);
 
   const [mounted, setMounted] = useState(false);
