@@ -3,7 +3,7 @@ import { EQUALIZER_SURFACE_PROMPT } from "./prompt";
 import { ConversationChain, LLMChain } from "langchain/chains";
 import { BaseMemory, BufferMemory } from "langchain/memory";
 
-export const loadTridentSurfaceChain = ({
+export const loadEqualizerSurfaceChain = ({
   llm,
   memory,
 }: {

@@ -2,7 +2,7 @@ import { LLMChain } from "langchain/chains";
 import { BaseLanguageModel } from "langchain/dist/base_language";
 import { EQUALIZER_INNER_PROMPT } from "./prompt";
 
-export const loadTridentInnerChain = ({
+export const loadEqualizerInnerChain = ({
   llm,
 }: {
   llm: BaseLanguageModel;

@@ -2,7 +2,7 @@ import { LLMChain } from "langchain/chains";
 import { EQUALIZER_DEEP_PROMPT } from "./prompt";
 import { BaseLanguageModel } from "langchain/dist/base_language";
 
-export const loadTridentDeepChain = ({
+export const loadEqualizerDeepChain = ({
   llm,
 }: {
   llm: BaseLanguageModel;
