@@ -13,9 +13,9 @@ export async function POST(request: Request) {
       messages: Array<{ type: string; data: { content: string } }>;
     } = JSON.parse(pastMessagesJsonString);
     chatHistory = pastMessages.messages
-      .map((message, idx) => {
+      .map((message) => {
         if (message.data.content) {
-          if (idx === 0 || idx % 2 === 0) {
+          if (message.type === "human") {
             return `Human: ${message.data.content}`;
           } else {
             return null;

@@ -15,19 +15,17 @@ export async function POST(request: Request) {
       messages: Array<{ type: string; data: { content: string } }>;
     } = JSON.parse(pastMessagesJsonString);
 
-    const chatHistoryMessages = pastMessages.messages.map(
-      (message, idx: number) => {
-        if (message.data.content) {
-          if (idx === 0 || idx % 2 === 0) {
-            return new HumanChatMessage(message.data.content);
-          } else {
-            return new AIChatMessage(message.data.content);
-          }
+    const chatHistoryMessages = pastMessages.messages.map((message) => {
+      if (message.data.content) {
+        if (message.type === "human") {
+          return new HumanChatMessage(message.data.content);
         } else {
-          return new HumanChatMessage("");
+          return new AIChatMessage(message.data.content);
         }
+      } else {
+        return new HumanChatMessage("");
       }
-    );
+    });
     chatHistory = new ChatMessageHistory(chatHistoryMessages);
   }
   const memory = new BufferMemory({

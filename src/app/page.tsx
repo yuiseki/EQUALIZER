@@ -90,7 +90,16 @@ export default function Home() {
   const [responding, setResponding] = useState(false);
   const [pastMessages, setPastMessages] = useState<
     { messages: Array<any> } | undefined
-  >();
+  >({
+    messages: [
+      {
+        type: "ai",
+        data: {
+          content: greetings,
+        },
+      },
+    ],
+  });
   const onSubmit = useCallback(async () => {
     setResponding(true);
 
