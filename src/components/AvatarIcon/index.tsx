@@ -6,12 +6,14 @@ export const AvatarIcon: React.FC<{ who: string }> = ({ who }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     if (!canvasRef.current) {
-      throw new Error("objectがnull");
+      console.error("context is null or undefined!!!");
+      return;
     }
     const canvas = canvasRef.current;
     const canvasContext = canvas.getContext("2d");
     if (!canvasContext) {
-      throw new Error("context is null or undefined!!!");
+      console.error("context is null or undefined!!!");
+      return;
     }
     // https://sbfl.net/blog/2019/01/07/javascript-audio-spectrum/
     //const spectrum: number[] = [
