@@ -104,6 +104,7 @@ export default function Home() {
     await sleep(200);
     scrollToBottom();
 
+    setResponding(true);
     setRequesting(true);
     const surfaceRes = await nextPostJson("/api/surface", {
       query: newInputText,
@@ -122,9 +123,9 @@ export default function Home() {
       },
       true
     );
+    setResponding(false);
 
     /*
-    setResponding(true);
     setRequesting(true);
     const innerRes = await nextPostJson("/api/inner", {
       pastMessages: JSON.stringify(surfaceResJson.history),

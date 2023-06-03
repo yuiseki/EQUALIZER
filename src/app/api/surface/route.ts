@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     chatHistory,
   });
 
-  const model = new OpenAI({ temperature: 0 });
+  const model = new OpenAI({ temperature: 0, maxTokens: 2000 });
   const surfaceChain = loadEqualizerSurfaceChain({ llm: model, memory });
   const surfaceResult = await surfaceChain.call({ input: query });
 
