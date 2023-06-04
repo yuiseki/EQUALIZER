@@ -11,7 +11,6 @@ export const VoteToCommentView: React.FC<{
   vote: any;
   onVote: (commentId: string, value: number) => void;
 }> = ({ comment, commentIndex, commentId, vote, onVote }) => {
-  console.log(vote);
   const [voted, setVoted] = useState(!!vote);
   const [votedValue, setVotedValue] = useState<number | undefined>(
     vote ? vote.value : undefined
