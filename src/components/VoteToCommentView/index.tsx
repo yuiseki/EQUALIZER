@@ -53,6 +53,17 @@ export const VoteToCommentView: React.FC<{
             maxWidth: "100%",
           }}
         >
+          <div
+            className="voteToCommentTextRow"
+            style={{
+              minHeight: "1em",
+              maxWidth: "100%",
+              wordBreak: "break-all",
+              marginBottom: "15px",
+            }}
+          >
+            以下の意見に関して、あなたの考えを教えてください：
+          </div>
           {comment.split("\n").map((row, rowIdx) => {
             return (
               <div
@@ -64,7 +75,7 @@ export const VoteToCommentView: React.FC<{
                   wordBreak: "break-all",
                 }}
               >
-                {row}
+                「{row}」
               </div>
             );
           })}
