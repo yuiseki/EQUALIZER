@@ -7,7 +7,8 @@ export const DialogueElementView: React.FC<{
   dialogueElement: DialogueElement;
   dialogueIndex: number;
   isResponding: boolean;
-}> = ({ dialogueElement, dialogueIndex, isResponding }) => {
+  needLogin: boolean;
+}> = ({ dialogueElement, dialogueIndex, isResponding, needLogin }) => {
   return (
     <div
       className={`${styles.dialogueElementView} ${
@@ -63,6 +64,23 @@ export const DialogueElementView: React.FC<{
                 </div>
               );
             })}
+          {needLogin && (
+            <div
+              style={{
+                marginTop: "1em",
+                fontSize: "1.4rem",
+              }}
+            >
+              <a
+                href="/api/auth/signin"
+                style={{
+                  textDecoration: "underline",
+                }}
+              >
+                議論に参加するために、まずはTwitterアカウントでのログインをお願いします。
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </div>

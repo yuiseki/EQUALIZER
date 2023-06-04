@@ -9,6 +9,8 @@ import { sleep } from "@/utils/sleep";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import styles from "./page.module.css";
+import useSWR from "swr";
+import { jsonFetcher } from "@/utils/jsonFetcher";
 
 const themes = `
 現在、以下の議題への参加をお待ちしています。
@@ -25,24 +27,66 @@ const themes = `
 どの議題に関心がありますか？
 `;
 
-const greetings = `ようこそ。私は対話型熟議促進人類包摂支援システム「イコライザー」です。
+const greetingsBefore = `ようこそ。私は対話型熟議促進人類包摂支援システム「イコライザー」です。
 重要な議論に、ぜひ参加していただけませんか？あなたの協力が必要です。
 
-現在の議題は「ChatGPTのようなAIアシスタントの、ユーザーの趣味嗜好に合わせたパーソナライゼーションは、どこまで進めるべきだとお考えですか？このプロセスに境界線があるとすれば、それはどのようなものでしょうか？」です。
+現在の議題は「ChatGPTのようなAIアシスタントの、ユーザーの趣味嗜好に合わせたパーソナライゼーションは、どこまで進めるべきだとお考えですか？このプロセスに境界線があるとすれば、それはどのようなものでしょうか？」です。`;
 
-ぜひ、あなたの意見をお聞かせください。ご協力をお願いします！`;
+const greetingsAfter =
+  "ぜひ、あなたの意見をお聞かせください。ご協力をお願いします！";
 
 export default function Home() {
+  const { data: userData, error: userDataError } = useSWR(
+    "/api/auth/session",
+    jsonFetcher
+  );
+  const [user, setUser] = useState<
+    | {
+        name: string;
+        email: string;
+        image: string;
+      }
+    | undefined
+  >();
+  useEffect(() => {
+    if (userData && "user" in userData) {
+      setUser(userData.user);
+    }
+  }, [userData]);
+
   const [requesting, setRequesting] = useState(false);
 
   // input ref and state
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [inputText, setInputText] = useState("");
 
+  // initialize greetings
+  const [greetings, setGreetings] = useState<string | undefined>();
+  const { data: userCount, error: userCountError } = useSWR(
+    "/api/public/users",
+    jsonFetcher
+  );
+  const { data: commentCount, error: commentCountError } = useSWR(
+    "/api/public/comments",
+    jsonFetcher
+  );
+  useEffect(() => {
+    if (!userCount || !commentCount) {
+      return;
+    }
+    const greetingsInfo = `
+
+現在、この議題に対して${userCount.count}人のユーザーが議論に参加し、${commentCount.count}件の意見が集まっています。
+
+`;
+
+    setGreetings(`${greetingsBefore}${greetingsInfo}${greetingsAfter}`);
+  }, [commentCount, userCount]);
+
   // dialogue state
   const [dialogueList, setDialogueList] = useState<DialogueElement[]>([]);
   const [lazyInserting, setLazyInserting] = useState(false);
-  const [insertingText, setInsertingText] = useState(greetings);
+  const [insertingText, setInsertingText] = useState("");
   const insertNewDialogue = useCallback(
     (newDialogueElement: DialogueElement, lazy?: boolean) => {
       if (!lazy) {
@@ -110,16 +154,7 @@ export default function Home() {
   const [responding, setResponding] = useState(false);
   const [pastMessages, setPastMessages] = useState<
     { messages: Array<any> } | undefined
-  >({
-    messages: [
-      {
-        type: "ai",
-        data: {
-          content: greetings,
-        },
-      },
-    ],
-  });
+  >();
   const onSubmit = useCallback(async () => {
     setResponding(true);
 
@@ -210,7 +245,7 @@ export default function Home() {
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    if (!mounted) {
+    if (!mounted && greetings) {
       setMounted(true);
       insertNewDialogue(
         {
@@ -219,12 +254,22 @@ export default function Home() {
         },
         false
       );
+      setPastMessages({
+        messages: [
+          {
+            type: "ai",
+            data: {
+              content: greetings,
+            },
+          },
+        ],
+      });
     } else {
       if (textareaRef.current) {
         textareaRef.current.focus();
       }
     }
-  }, [mounted, insertNewDialogue]);
+  }, [mounted, insertNewDialogue, greetings]);
   if (!mounted) return null;
 
   return (
@@ -246,6 +291,7 @@ export default function Home() {
                 (responding || lazyInserting) &&
                 dialogueIndex === dialogueList.length - 1
               }
+              needLogin={!user}
             />
           );
         })}
@@ -253,7 +299,7 @@ export default function Home() {
       <div className={styles.textInputWrap}>
         <TextInput
           textareaRef={textareaRef}
-          disabled={responding || lazyInserting}
+          disabled={responding || lazyInserting || !user}
           placeholder={"こんにちは。今日の議題はなんですか？"}
           inputText={inputText}
           setInputText={setInputText}

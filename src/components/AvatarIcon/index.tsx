@@ -17,7 +17,6 @@ export const AvatarIcon: React.FC<{ who: string }> = ({ who }) => {
       }
     | undefined
   >();
-
   useEffect(() => {
     if (userData && "user" in userData) {
       setUser(userData.user);
