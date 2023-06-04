@@ -20,6 +20,15 @@ a {
   text-decoration: none;
 }
 
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 @keyframes cursor-blink {
   0% {
     opacity: 0;

@@ -11,6 +11,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./page.module.css";
 import useSWR from "swr";
 import { jsonFetcher } from "@/utils/jsonFetcher";
+import { VoteToCommentView } from "@/components/VoteToCommentView";
 
 const themes = `
 現在、以下の議題への参加をお待ちしています。
@@ -62,26 +63,29 @@ export default function Home() {
 
   // initialize greetings
   const [greetings, setGreetings] = useState<string | undefined>();
-  const { data: userCount, error: userCountError } = useSWR(
+  const { data: users, error: userError } = useSWR(
     "/api/public/users",
     jsonFetcher
   );
-  const { data: commentCount, error: commentCountError } = useSWR(
+  const { data: comments, error: commentError } = useSWR(
     "/api/public/comments",
     jsonFetcher
   );
+  const { data: votes, error: votesError } = useSWR(
+    "/api/self/votes",
+    jsonFetcher
+  );
   useEffect(() => {
-    if (!userCount || !commentCount) {
+    if (!users || !comments || !votes) {
       return;
     }
     const greetingsInfo = `
-
-現在、この議題に対して ${userCount.count}名 のユーザーが議論に参加し、 ${commentCount.count}件 の意見が集まっています。
-
+現在、この議題に対して ${users.count}名 のユーザーが議論に参加し、 ${comments.count}件 の意見が集まっています。
 `;
-
-    setGreetings(`${greetingsBefore}${greetingsInfo}${greetingsAfter}`);
-  }, [commentCount, userCount]);
+    setGreetings(`${greetingsBefore}
+${greetingsInfo}
+${greetingsAfter}`);
+  }, [comments, users, votes]);
 
   // dialogue state
   const [dialogueList, setDialogueList] = useState<DialogueElement[]>([]);
@@ -234,14 +238,17 @@ export default function Home() {
     console.log(json);
   }, [inputText, insertNewDialogue]);
 
-  const onSubmitNewVote = useCallback(async () => {
-    const res = await nextPostJson("/api/self/votes", {
-      commentId: "",
-      value: 0,
-    });
-    const json = await res.json();
-    console.log(json);
-  }, []);
+  const onSubmitNewVote = useCallback(
+    async (commentId: string, value: number) => {
+      const res = await nextPostJson("/api/self/votes", {
+        commentId: commentId,
+        value: value,
+      });
+      const json = await res.json();
+      console.log(json);
+    },
+    []
+  );
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -295,6 +302,25 @@ export default function Home() {
             />
           );
         })}
+        {comments &&
+          votes &&
+          comments.results.map((comment: any, commentIndex: number) => {
+            const filteredVotes = votes.results.filter(
+              (vote: any) => vote.commentId === comment.id
+            );
+            const vote =
+              filteredVotes.length === 1 ? filteredVotes[0] : undefined;
+            return (
+              <VoteToCommentView
+                key={commentIndex}
+                comment={comment.text}
+                commentIndex={commentIndex}
+                commentId={comment.id}
+                vote={vote}
+                onVote={onSubmitNewVote}
+              />
+            );
+          })}
       </div>
       <div className={styles.textInputWrap}>
         <TextInput
