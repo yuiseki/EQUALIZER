@@ -34,6 +34,7 @@ export const VoteToCommentView: React.FC<{
   return (
     <div
       className={`${styles.voteToCommentView} ${styles.voteToCommentViewAssistant}`}
+      style={{ opacity: `${voted ? 0.8 : 1}` }}
     >
       <div className="avatarIconWrap">
         <AvatarIcon who={"assistant"} />
@@ -53,17 +54,32 @@ export const VoteToCommentView: React.FC<{
             maxWidth: "100%",
           }}
         >
-          <div
-            className="voteToCommentTextRow"
-            style={{
-              minHeight: "1em",
-              maxWidth: "100%",
-              wordBreak: "break-all",
-              marginBottom: "15px",
-            }}
-          >
-            以下の意見に関して、あなたの考えを教えてください：
-          </div>
+          {voted ? (
+            <div
+              className="voteToCommentTextRow"
+              style={{
+                minHeight: "1em",
+                maxWidth: "100%",
+                wordBreak: "break-all",
+                marginBottom: "15px",
+              }}
+            >
+              考えを教えていただき、ありがとうございました。
+            </div>
+          ) : (
+            <div
+              className="voteToCommentTextRow"
+              style={{
+                minHeight: "1em",
+                maxWidth: "100%",
+                wordBreak: "break-all",
+                marginBottom: "15px",
+              }}
+            >
+              以下の意見に関して、あなたの考えを教えてください：
+            </div>
+          )}
+
           {comment.split("\n").map((row, rowIdx) => {
             return (
               <div
@@ -91,8 +107,14 @@ export const VoteToCommentView: React.FC<{
           <button
             style={{
               padding: "6px",
-              border: "none",
               borderRadius: "4px",
+              border: `${
+                voted
+                  ? votedValue === -1
+                    ? "4px solid #77ffff"
+                    : "4px solid transparent"
+                  : "4px solid transparent"
+              }`,
               backgroundColor: `${
                 voted
                   ? votedValue === -1
@@ -117,8 +139,14 @@ export const VoteToCommentView: React.FC<{
           <button
             style={{
               padding: "6px",
-              border: "none",
               borderRadius: "4px",
+              border: `${
+                voted
+                  ? votedValue === 1
+                    ? "4px solid #77ffff"
+                    : "4px solid transparent"
+                  : "4px solid transparent"
+              }`,
               backgroundColor: `${
                 voted
                   ? votedValue === 1
@@ -143,8 +171,14 @@ export const VoteToCommentView: React.FC<{
           <button
             style={{
               padding: "6px",
-              border: "none",
               borderRadius: "4px",
+              border: `${
+                voted
+                  ? votedValue === 0
+                    ? "4px solid #77ffff"
+                    : "4px solid transparent"
+                  : "4px solid transparent"
+              }`,
               backgroundColor: `${
                 voted
                   ? votedValue === 0
