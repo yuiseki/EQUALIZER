@@ -168,6 +168,16 @@ export default function Home() {
     */
   }, [inputText, insertNewDialogue, pastMessages]);
 
+  const onSubmitConversation = useCallback(async () => {
+    const res = await nextPostJson("/api/self/conversations", {
+      topic: "AIアシスタントのパーソナライゼーションはどこまでやるべきか？",
+      description:
+        "ChatGPTのようなAIアシスタントの、ユーザーの趣味嗜好に合わせたパーソナライゼーションはどこまでやるべきだと思うか？",
+    });
+    const json = await res.json();
+    console.log(json);
+  }, []);
+
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     if (!mounted) {

@@ -5,7 +5,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export default NextAuth({
+export const authOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     TwitterProvider({
@@ -13,4 +13,14 @@ export default NextAuth({
       clientSecret: process.env.TWITTER_API_KEY_SECRET as string,
     }),
   ],
-});
+  callbacks: {
+    session: async ({ session, user }: { session: any; user: any }) => {
+      return {
+        ...session,
+        user: user,
+      };
+    },
+  },
+};
+
+export default NextAuth(authOptions);

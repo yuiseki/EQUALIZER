@@ -30,6 +30,7 @@ model Comment {
   user            User         @relation(fields: [userId], references: [id])
   conversationId  String       @db.ObjectId
   conversation    Conversation @relation(fields: [conversationId], references: [id])
+  text            String
   votes           Vote[]
   @@map("comments")
 }
