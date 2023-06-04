@@ -302,14 +302,15 @@ ${greetingsAfter}`);
             />
           );
         })}
-        {comments &&
+        {user &&
+          comments &&
           votes &&
           comments.results.map((comment: any, commentIndex: number) => {
-            const filteredVotes = votes.results.filter(
+            const filteredVotes = votes?.results?.filter(
               (vote: any) => vote.commentId === comment.id
             );
             const vote =
-              filteredVotes.length === 1 ? filteredVotes[0] : undefined;
+              filteredVotes?.length === 1 ? filteredVotes[0] : undefined;
             return (
               <VoteToCommentView
                 key={commentIndex}
