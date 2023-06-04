@@ -23,7 +23,7 @@ export async function POST(request: Request, response: Response) {
   if (!session) {
     return NextResponse.json({ error: "Not Authorized" }, { status: 401 });
   }
-  const user = await prisma.user.findUnique({
+  const user = await prisma.user.findFirst({
     where: { id: session.user.id },
   });
   if (!user) {
