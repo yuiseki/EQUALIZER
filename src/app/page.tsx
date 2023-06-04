@@ -76,7 +76,7 @@ export default function Home() {
     }
     const greetingsInfo = `
 
-現在、この議題に対して${userCount.count}人のユーザーが議論に参加し、${commentCount.count}件の意見が集まっています。
+現在、この議題に対して ${userCount.count}名 のユーザーが議論に参加し、 ${commentCount.count}件 の意見が集まっています。
 
 `;
 
