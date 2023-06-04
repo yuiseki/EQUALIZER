@@ -20,6 +20,9 @@ export async function POST(request: Request, response: Response) {
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
   });
+  if (!user) {
+    return NextResponse.json({ error: 'Not Authorized' }, { status: 401 })
+  }
 
   const res = await request.json();
   const conversationId = res.conversationId;
