@@ -67,14 +67,16 @@ export default function Home() {
     "/api/public/users",
     jsonFetcher
   );
-  const { data: comments, error: commentError } = useSWR(
-    "/api/public/comments",
-    jsonFetcher
-  );
-  const { data: votes, error: votesError } = useSWR(
-    "/api/self/votes",
-    jsonFetcher
-  );
+  const {
+    data: comments,
+    error: commentError,
+    mutate: mutateComments,
+  } = useSWR("/api/public/comments", jsonFetcher);
+  const {
+    data: votes,
+    error: votesError,
+    mutate: mutateVotes,
+  } = useSWR("/api/self/votes", jsonFetcher);
   useEffect(() => {
     if (!users || !comments || !votes) {
       return;
@@ -224,19 +226,18 @@ ${greetingsAfter}`);
     const newInputText = inputText.trim();
     setInputText("");
     console.log(newInputText);
-    insertNewDialogue({
-      who: "user",
-      text: newInputText,
-    });
-    await sleep(200);
-    scrollToBottom();
+    setRequesting(true);
     const res = await nextPostJson("/api/self/comments", {
       conversationId: "647c072b4ab980bc5113d52e",
       text: newInputText,
     });
     const json = await res.json();
     console.log(json);
-  }, [inputText, insertNewDialogue]);
+    await mutateComments();
+    setRequesting(false);
+    await sleep(200);
+    scrollToBottom();
+  }, [inputText, mutateComments]);
 
   const onSubmitNewVote = useCallback(
     async (commentId: string, value: number) => {
@@ -246,8 +247,9 @@ ${greetingsAfter}`);
       });
       const json = await res.json();
       console.log(json);
+      mutateVotes();
     },
-    []
+    [mutateVotes]
   );
 
   const [mounted, setMounted] = useState(false);
@@ -271,10 +273,6 @@ ${greetingsAfter}`);
           },
         ],
       });
-    } else {
-      if (textareaRef.current) {
-        textareaRef.current.focus();
-      }
     }
   }, [mounted, insertNewDialogue, greetings]);
   if (!mounted) return null;
@@ -326,11 +324,26 @@ ${greetingsAfter}`);
       <div className={styles.textInputWrap}>
         <TextInput
           textareaRef={textareaRef}
-          disabled={responding || lazyInserting || !user}
-          placeholder={"こんにちは。今日の議題はなんですか？"}
+          disabled={
+            requesting ||
+            responding ||
+            lazyInserting ||
+            !user ||
+            !comments ||
+            !votes ||
+            comments.results.length !== votes.results.length
+          }
+          placeholder={
+            !user ||
+            !comments ||
+            !votes ||
+            comments.results.length !== votes.results.length
+              ? "すべての意見の考えを教えていただけると、あなたの意見を追加できます"
+              : "あなたの意見を追加する"
+          }
           inputText={inputText}
           setInputText={setInputText}
-          onSubmit={onSubmit}
+          onSubmit={onSubmitNewComment}
         />
       </div>
     </main>
