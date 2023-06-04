@@ -10,6 +10,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Conversation {
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String      @db.ObjectId
+  user            User        @relation(fields: [userId], references: [id])
+  topic           String
+  description     String
+  comments        Comment[]
+  @@map("conversations")
+}
+
+model Comment {
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  id              String       @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String       @db.ObjectId
+  user            User         @relation(fields: [userId], references: [id])
+  conversationId  String       @db.ObjectId
+  conversation    Conversation @relation(fields: [conversationId], references: [id])
+  votes           Vote[]
+  @@map("comments")
+}
+
+model Vote {
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String      @db.ObjectId
+  user            User        @relation(fields: [userId], references: [id])
+  commentId       String      @db.ObjectId
+  comment         Comment     @relation(fields: [commentId], references: [id])
+  value           Int
+  @@unique([commentId, userId])
+  @@map("votes")
+}
+
 model User {
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
@@ -20,6 +57,9 @@ model User {
   image           String
   sessions        Session[]
   accounts        Account[]
+  conversations   Conversation[]
+  comments        Comment[]
+  votes           Vote[]
   @@map("users")
 }
 
@@ -41,9 +81,7 @@ model Account {
   sessionState       String?
   oauth_token_secret String?
   oauth_token        String?
-
-  user User @relation(fields: [userId], references: [id])
-
+  user               User @relation(fields: [userId], references: [id])
   @@unique([provider, providerAccountId])
   @@map("accounts")
 }
