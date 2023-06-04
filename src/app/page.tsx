@@ -135,7 +135,7 @@ export default function Home() {
 
     setResponding(true);
     setRequesting(true);
-    const surfaceRes = await nextPostJson("/api/surface", {
+    const surfaceRes = await nextPostJson("/api/ai/surface", {
       query: newInputText,
       pastMessages: pastMessages ? JSON.stringify(pastMessages) : undefined,
     });
@@ -156,13 +156,13 @@ export default function Home() {
 
     /*
     setRequesting(true);
-    const innerRes = await nextPostJson("/api/inner", {
+    const innerRes = await nextPostJson("/api/ai/inner", {
       pastMessages: JSON.stringify(surfaceResJson.history),
     });
     const innerResJson = await innerRes.json();
     console.log(innerResJson);
     // TODO: process innerResJson
-    // TODO: request to /api/deep
+    // TODO: request to /api/ai/deep
     setResponding(false);
     setRequesting(false);
     */
