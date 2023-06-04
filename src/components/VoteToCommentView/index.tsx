@@ -92,7 +92,7 @@ export const VoteToCommentView: React.FC<{
               marginBottom: "15px",
             }}
           >
-            以上の意見に関して、あなたの考えを教えてください：
+            という意見があります。あなたの考えを教えてください。
           </div>
         )}
         <div
