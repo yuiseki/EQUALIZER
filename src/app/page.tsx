@@ -233,6 +233,7 @@ ${greetingsAfter}`);
     });
     const json = await res.json();
     console.log(json);
+    await sleep(500);
     await mutateComments();
     setRequesting(false);
     await sleep(200);
