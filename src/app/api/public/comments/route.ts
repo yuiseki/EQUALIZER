@@ -15,8 +15,11 @@ export async function GET(request: Request) {
     },
   });
 
-  return NextResponse.json({
-    count: count,
-    results: results,
-  });
+  return NextResponse.json(
+    {
+      count: count,
+      results: results,
+    },
+    { status: 200 }
+  );
 }
