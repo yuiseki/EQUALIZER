@@ -10,11 +10,11 @@ export async function GET(request: Request, response: Response) {
   if (!session) {
     return NextResponse.json({ error: "Not Authorized" }, { status: 401 });
   }
-  const result = await prisma.conversation.findMany({
+  const results = await prisma.conversation.findMany({
     where: { userId: session.user.id },
   });
   return NextResponse.json({
-    result,
+    results,
   });
 }
 
@@ -34,7 +34,7 @@ export async function POST(request: Request, response: Response) {
   const topic = res.topic;
   const description = res.description;
 
-  const result = await prisma.conversation.create({
+  const results = await prisma.conversation.create({
     data: {
       userId: user.id,
       topic: topic,
@@ -42,6 +42,6 @@ export async function POST(request: Request, response: Response) {
     },
   });
   return NextResponse.json({
-    result,
+    results,
   });
 }

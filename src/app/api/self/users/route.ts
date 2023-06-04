@@ -10,10 +10,10 @@ export async function GET(request: Request, response: Response) {
   if (!session) {
     return NextResponse.json({ error: "Not Authorized" }, { status: 401 });
   }
-  const result = await prisma.user.findMany({
+  const results = await prisma.user.findMany({
     where: { id: session.user.id },
   });
   return NextResponse.json({
-    result,
+    results,
   });
 }
