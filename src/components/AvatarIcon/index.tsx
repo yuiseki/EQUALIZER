@@ -1,8 +1,29 @@
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.css";
+import { jsonFetcher } from "@/utils/jsonFetcher";
+import useSWR from "swr";
 
 export const AvatarIcon: React.FC<{ who: string }> = ({ who }) => {
+  const { data: userData, error: userDataError } = useSWR(
+    "/api/auth/session",
+    jsonFetcher
+  );
+  const [user, setUser] = useState<
+    | {
+        name: string;
+        email: string;
+        image: string;
+      }
+    | undefined
+  >();
+
+  useEffect(() => {
+    if (userData && "user" in userData) {
+      setUser(userData.user);
+    }
+  }, [userData]);
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     if (!canvasRef.current) {
@@ -93,12 +114,18 @@ export const AvatarIcon: React.FC<{ who: string }> = ({ who }) => {
           </div>
         </div>
       ) : (
-        <img
-          width={30}
-          height={30}
-          src="https://i.gyazo.com/8960181a3459473ada71a8718df8785b.png"
-          alt="user icon"
-        />
+        <>
+          {user ? (
+            <img width={30} height={30} src={user.image} alt={user.name} />
+          ) : (
+            <img
+              width={30}
+              height={30}
+              src="https://i.gyazo.com/8960181a3459473ada71a8718df8785b.png"
+              alt="user icon"
+            />
+          )}
+        </>
       )}
     </div>
   );
