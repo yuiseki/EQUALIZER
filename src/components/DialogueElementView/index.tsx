@@ -2,6 +2,7 @@
 import { DialogueElement } from "@/types/DialogueElement";
 import { AvatarIcon } from "@/components/AvatarIcon";
 import styles from "./styles.module.css";
+import Link from "next/link";
 
 export const DialogueElementView: React.FC<{
   dialogueElement: DialogueElement;
@@ -71,14 +72,15 @@ export const DialogueElementView: React.FC<{
                 fontSize: "1.4rem",
               }}
             >
-              <a
-                href="/api/auth/signin"
-                style={{
-                  textDecoration: "underline",
-                }}
-              >
-                議論に参加するために、まずはTwitterアカウントでのログインをお願いします。
-              </a>
+              <Link href="/api/auth/signin">
+                <span
+                  style={{
+                    textDecoration: "underline",
+                  }}
+                >
+                  議論に参加するために、まずはTwitterアカウントでのログインをお願いします。
+                </span>
+              </Link>
             </div>
           )}
         </div>
