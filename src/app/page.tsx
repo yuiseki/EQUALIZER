@@ -168,11 +168,41 @@ export default function Home() {
     */
   }, [inputText, insertNewDialogue, pastMessages]);
 
-  const onSubmitConversation = useCallback(async () => {
+  // プロトタイプでは使わない
+  /*
+  const onSubmitNewConversation = useCallback(async () => {
     const res = await nextPostJson("/api/self/conversations", {
       topic: "AIアシスタントのパーソナライゼーションはどこまでやるべきか？",
       description:
         "ChatGPTのようなAIアシスタントの、ユーザーの趣味嗜好に合わせたパーソナライゼーションはどこまでやるべきだと思うか？",
+    });
+    const json = await res.json();
+    console.log(json);
+  }, []);
+  */
+
+  const onSubmitNewComment = useCallback(async () => {
+    const newInputText = inputText.trim();
+    setInputText("");
+    console.log(newInputText);
+    insertNewDialogue({
+      who: "user",
+      text: newInputText,
+    });
+    await sleep(200);
+    scrollToBottom();
+    const res = await nextPostJson("/api/self/comments", {
+      conversationId: "647c072b4ab980bc5113d52e",
+      text: newInputText,
+    });
+    const json = await res.json();
+    console.log(json);
+  }, [inputText, insertNewDialogue]);
+
+  const onSubmitNewVote = useCallback(async () => {
+    const res = await nextPostJson("/api/self/votes", {
+      commentId: "",
+      vote: 0,
     });
     const json = await res.json();
     console.log(json);
