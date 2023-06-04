@@ -7,6 +7,9 @@ const prisma = new PrismaClient();
 
 export async function GET(request: Request, response: Response) {
   const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: "Not Authorized" }, { status: 401 });
+  }
   const result = await prisma.comment.findMany({
     where: { userId: session.user.id },
   });
@@ -17,11 +20,14 @@ export async function GET(request: Request, response: Response) {
 
 export async function POST(request: Request, response: Response) {
   const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: "Not Authorized" }, { status: 401 });
+  }
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
   });
   if (!user) {
-    return NextResponse.json({ error: 'Not Authorized' }, { status: 401 })
+    return NextResponse.json({ error: "Not Authorized" }, { status: 401 });
   }
 
   const res = await request.json();
