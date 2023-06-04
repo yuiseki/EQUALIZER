@@ -237,7 +237,7 @@ export default function Home() {
   const onSubmitNewVote = useCallback(async () => {
     const res = await nextPostJson("/api/self/votes", {
       commentId: "",
-      vote: 0,
+      value: 0,
     });
     const json = await res.json();
     console.log(json);

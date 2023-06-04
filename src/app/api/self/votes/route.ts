@@ -26,13 +26,13 @@ export async function POST(request: Request, response: Response) {
 
   const res = await request.json();
   const commentId = res.commentId;
-  const vote = res.vote;
+  const value = res.value as number;
 
   const result = await prisma.vote.create({
     data: {
       userId: user.id,
       commentId: commentId,
-      vote: vote,
+      value: value,
     },
   });
   return NextResponse.json({
