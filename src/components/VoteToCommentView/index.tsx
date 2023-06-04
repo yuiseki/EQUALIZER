@@ -63,6 +63,7 @@ export const VoteToCommentView: React.FC<{
                   minHeight: "1em",
                   maxWidth: "100%",
                   wordBreak: "break-all",
+                  fontSize: "1.3rem",
                 }}
               >
                 「{row}」
@@ -80,7 +81,7 @@ export const VoteToCommentView: React.FC<{
               marginBottom: "15px",
             }}
           >
-            考えを教えていただき、ありがとうございました。
+            という意見についての考えを教えていただき、ありがとうございました。
           </div>
         ) : (
           <div
