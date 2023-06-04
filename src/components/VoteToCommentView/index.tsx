@@ -54,32 +54,6 @@ export const VoteToCommentView: React.FC<{
             maxWidth: "100%",
           }}
         >
-          {voted ? (
-            <div
-              className="voteToCommentTextRow"
-              style={{
-                minHeight: "1em",
-                maxWidth: "100%",
-                wordBreak: "break-all",
-                marginBottom: "15px",
-              }}
-            >
-              考えを教えていただき、ありがとうございました。
-            </div>
-          ) : (
-            <div
-              className="voteToCommentTextRow"
-              style={{
-                minHeight: "1em",
-                maxWidth: "100%",
-                wordBreak: "break-all",
-                marginBottom: "15px",
-              }}
-            >
-              以下の意見に関して、あなたの考えを教えてください：
-            </div>
-          )}
-
           {comment.split("\n").map((row, rowIdx) => {
             return (
               <div
@@ -96,6 +70,31 @@ export const VoteToCommentView: React.FC<{
             );
           })}
         </div>
+        {voted ? (
+          <div
+            className="voteToCommentTextRow"
+            style={{
+              minHeight: "1em",
+              maxWidth: "100%",
+              wordBreak: "break-all",
+              marginBottom: "15px",
+            }}
+          >
+            考えを教えていただき、ありがとうございました。
+          </div>
+        ) : (
+          <div
+            className="voteToCommentTextRow"
+            style={{
+              minHeight: "1em",
+              maxWidth: "100%",
+              wordBreak: "break-all",
+              marginBottom: "15px",
+            }}
+          >
+            以上の意見に関して、あなたの考えを教えてください：
+          </div>
+        )}
         <div
           style={{
             marginTop: "25px",
