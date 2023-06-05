@@ -298,12 +298,7 @@ ${greetingsAfter}`);
               />
             );
           })}
-        {publicComments &&
-          selfVotes &&
-          selfVotes.results &&
-          publicComments.results.length === selfVotes.results.length && (
-            <ConversationVisualizationView />
-          )}
+        <ConversationVisualizationView conversationId={conversationId} />
       </div>
       <div className={styles.textInputWrap}>
         <TextInput

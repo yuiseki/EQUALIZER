@@ -28,6 +28,7 @@ export async function GET(
       id: true,
       conversationId: true,
       text: true,
+      votes: true,
     },
   });
 
