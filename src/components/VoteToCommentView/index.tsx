@@ -93,7 +93,7 @@ export const VoteToCommentView: React.FC<{
               marginBottom: "15px",
             }}
           >
-            という意見についての考えを教えていただき、ありがとうございました。
+            という意見についてのあなたの考えを教えていただき、ありがとうございました。
           </div>
         ) : (
           <div
@@ -105,7 +105,7 @@ export const VoteToCommentView: React.FC<{
               marginBottom: "15px",
             }}
           >
-            という意見があります。あなたの考えを教えてください。
+            という意見について、あなたの考えを教えてください。
           </div>
         )}
         <div
