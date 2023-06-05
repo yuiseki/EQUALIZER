@@ -3,8 +3,10 @@ import { DialogueElement } from "@/types/DialogueElement";
 import { AvatarIcon } from "@/components/AvatarIcon";
 import styles from "./styles.module.css";
 import { useCallback, useMemo, useState } from "react";
+import Link from "next/link";
 
 export const VoteToCommentView: React.FC<{
+  conversationId?: string;
   comment: string;
   commentIndex: number;
   commentId: string;
@@ -14,6 +16,7 @@ export const VoteToCommentView: React.FC<{
   isLoggedIn: boolean;
   isPreview?: boolean;
 }> = ({
+  conversationId,
   comment,
   commentIndex,
   commentId,
@@ -28,15 +31,27 @@ export const VoteToCommentView: React.FC<{
     vote ? vote.value : undefined
   );
   const totalVoteCount = useMemo(() => {
+    if (!voteResults) {
+      return 0;
+    }
     return voteResults.length;
   }, [voteResults]);
   const upVoteCount = useMemo(() => {
+    if (!voteResults) {
+      return 0;
+    }
     return voteResults.filter((vote: any) => vote.value === -1).length;
   }, [voteResults]);
   const downVoteCount = useMemo(() => {
+    if (!voteResults) {
+      return 0;
+    }
     return voteResults.filter((vote: any) => vote.value === 1).length;
   }, [voteResults]);
   const noVoteCount = useMemo(() => {
+    if (!voteResults) {
+      return 0;
+    }
     return voteResults.filter((vote: any) => vote.value === 0).length;
   }, [voteResults]);
   const onClickUpVote = useCallback(() => {
@@ -94,7 +109,7 @@ export const VoteToCommentView: React.FC<{
             );
           })}
         </div>
-        {isLoggedIn && voted ? (
+        {isLoggedIn && voted && (
           <div
             className="voteToCommentTextRow"
             style={{
@@ -106,7 +121,8 @@ export const VoteToCommentView: React.FC<{
           >
             という意見についてのあなたの考えを教えていただき、ありがとうございました。
           </div>
-        ) : (
+        )}
+        {isLoggedIn && !voted && (
           <div
             className="voteToCommentTextRow"
             style={{
@@ -119,112 +135,132 @@ export const VoteToCommentView: React.FC<{
             という意見について、あなたの考えを教えてください。
           </div>
         )}
-        <div
-          style={{
-            marginTop: "25px",
-            width: "100%",
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "40px",
-          }}
-        >
-          <button
+        {
+          <div
             style={{
-              padding: "4px",
-              borderRadius: "4px",
-              border: `${
-                voted
-                  ? votedValue === -1
-                    ? "4px solid #77ffff"
-                    : "4px solid transparent"
-                  : "4px solid transparent"
-              }`,
-              backgroundColor: `${
-                voted
-                  ? votedValue === -1
-                    ? "rgba(239, 239, 239, 0.9)"
-                    : "rgba(239, 239, 239, 0.5)"
-                  : "rgba(239, 239, 239, 1)"
-              }`,
-              color: `${
-                voted
-                  ? votedValue === -1
-                    ? "rgba(16, 16, 16, 0.9)"
-                    : "rgba(16, 16, 16, 0.5)"
-                  : "rgba(16, 16, 16, 1)"
-              }`,
-              opacity: `${voted ? (votedValue === -1 ? 0.8 : 0.5) : 1}`,
+              marginTop: "25px",
+              width: "100%",
+              display: "grid",
+              gridTemplateColumns: "repeat(3, 1fr)",
+              gap: "40px",
             }}
-            onClick={onClickUpVote}
-            disabled={voted}
           >
-            ✅ 賛成
-          </button>
-          <button
+            <button
+              style={{
+                padding: "4px",
+                borderRadius: "4px",
+                border: `${
+                  voted || !isLoggedIn
+                    ? votedValue === -1
+                      ? "4px solid #77ffff"
+                      : "4px solid transparent"
+                    : "4px solid transparent"
+                }`,
+                backgroundColor: `${
+                  voted || !isLoggedIn
+                    ? votedValue === -1
+                      ? "rgba(239, 239, 239, 0.9)"
+                      : "rgba(239, 239, 239, 0.5)"
+                    : "rgba(239, 239, 239, 1)"
+                }`,
+                color: `${
+                  voted || !isLoggedIn
+                    ? votedValue === -1
+                      ? "rgba(16, 16, 16, 0.9)"
+                      : "rgba(16, 16, 16, 0.5)"
+                    : "rgba(16, 16, 16, 1)"
+                }`,
+                opacity: `${voted ? (votedValue === -1 ? 0.8 : 0.5) : 1}`,
+              }}
+              onClick={onClickUpVote}
+              disabled={voted || !isLoggedIn}
+            >
+              ✅ 賛成
+            </button>
+            <button
+              style={{
+                padding: "4px",
+                borderRadius: "4px",
+                border: `${
+                  voted || !isLoggedIn
+                    ? votedValue === 1
+                      ? "4px solid #77ffff"
+                      : "4px solid transparent"
+                    : "4px solid transparent"
+                }`,
+                backgroundColor: `${
+                  voted || !isLoggedIn
+                    ? votedValue === 1
+                      ? "rgba(239, 239, 239, 0.9)"
+                      : "rgba(239, 239, 239, 0.5)"
+                    : "rgba(239, 239, 239, 1)"
+                }`,
+                color: `${
+                  voted || !isLoggedIn
+                    ? votedValue === 1
+                      ? "rgba(16, 16, 16, 0.9)"
+                      : "rgba(16, 16, 16, 0.5)"
+                    : "rgba(16, 16, 16, 1)"
+                }`,
+                opacity: `${voted ? (votedValue === 1 ? 0.8 : 0.5) : 1}`,
+              }}
+              onClick={onClickDownVote}
+              disabled={voted || !isLoggedIn}
+            >
+              🚫 反対
+            </button>
+            <button
+              style={{
+                padding: "4px",
+                borderRadius: "4px",
+                border: `${
+                  voted || !isLoggedIn
+                    ? votedValue === 0
+                      ? "4px solid #77ffff"
+                      : "4px solid transparent"
+                    : "4px solid transparent"
+                }`,
+                backgroundColor: `${
+                  voted || !isLoggedIn
+                    ? votedValue === 0
+                      ? "rgba(239, 239, 239, 0.9)"
+                      : "rgba(239, 239, 239, 0.5)"
+                    : "rgba(239, 239, 239, 1)"
+                }`,
+                color: `${
+                  voted || !isLoggedIn
+                    ? votedValue === 0
+                      ? "rgba(16, 16, 16, 0.9)"
+                      : "rgba(16, 16, 16, 0.5)"
+                    : "rgba(16, 16, 16, 1)"
+                }`,
+                opacity: `${voted ? (votedValue === 0 ? 0.8 : 0.5) : 1}`,
+              }}
+              onClick={onClickNoVote}
+              disabled={voted || !isLoggedIn}
+            >
+              🤔 わからない/どちらでもない
+            </button>
+          </div>
+        }
+        {!isLoggedIn && (
+          <div
             style={{
-              padding: "4px",
-              borderRadius: "4px",
-              border: `${
-                voted
-                  ? votedValue === 1
-                    ? "4px solid #77ffff"
-                    : "4px solid transparent"
-                  : "4px solid transparent"
-              }`,
-              backgroundColor: `${
-                voted
-                  ? votedValue === 1
-                    ? "rgba(239, 239, 239, 0.9)"
-                    : "rgba(239, 239, 239, 0.5)"
-                  : "rgba(239, 239, 239, 1)"
-              }`,
-              color: `${
-                voted
-                  ? votedValue === 1
-                    ? "rgba(16, 16, 16, 0.9)"
-                    : "rgba(16, 16, 16, 0.5)"
-                  : "rgba(16, 16, 16, 1)"
-              }`,
-              opacity: `${voted ? (votedValue === 1 ? 0.8 : 0.5) : 1}`,
+              marginTop: "1em",
+              fontSize: "1.4rem",
             }}
-            onClick={onClickDownVote}
-            disabled={voted}
           >
-            🚫 反対
-          </button>
-          <button
-            style={{
-              padding: "4px",
-              borderRadius: "4px",
-              border: `${
-                voted
-                  ? votedValue === 0
-                    ? "4px solid #77ffff"
-                    : "4px solid transparent"
-                  : "4px solid transparent"
-              }`,
-              backgroundColor: `${
-                voted
-                  ? votedValue === 0
-                    ? "rgba(239, 239, 239, 0.9)"
-                    : "rgba(239, 239, 239, 0.5)"
-                  : "rgba(239, 239, 239, 1)"
-              }`,
-              color: `${
-                voted
-                  ? votedValue === 0
-                    ? "rgba(16, 16, 16, 0.9)"
-                    : "rgba(16, 16, 16, 0.5)"
-                  : "rgba(16, 16, 16, 1)"
-              }`,
-              opacity: `${voted ? (votedValue === 0 ? 0.8 : 0.5) : 1}`,
-            }}
-            onClick={onClickNoVote}
-            disabled={voted}
-          >
-            🤔 わからない/どちらでもない
-          </button>
-        </div>
+            <Link href="/api/auth/signin">
+              <span
+                style={{
+                  textDecoration: "underline",
+                }}
+              >
+                この意見に対する考えを表明するために、Twitterアカウントでログインする
+              </span>
+            </Link>
+          </div>
+        )}
         {(voted || isPreview) && (
           <div
             style={{
@@ -303,6 +339,21 @@ export const VoteToCommentView: React.FC<{
                 </div>
               );
             })}
+          </div>
+        )}
+        {conversationId && (
+          <div>
+            <Link
+              href={`/conversations/${conversationId}/comments/${commentId}`}
+            >
+              <span
+                style={{
+                  textDecoration: "underline",
+                }}
+              >
+                permalink
+              </span>
+            </Link>
           </div>
         )}
       </div>

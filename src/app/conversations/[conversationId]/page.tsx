@@ -271,8 +271,7 @@ ${greetingsAfter}`);
             />
           );
         })}
-        {user &&
-          publicComments &&
+        {publicComments &&
           selfVotes &&
           publicComments.results.map((comment: any, commentIndex: number) => {
             const filteredSelfVotes = selfVotes?.results?.filter(
@@ -288,6 +287,7 @@ ${greetingsAfter}`);
             return (
               <VoteToCommentView
                 key={commentIndex}
+                conversationId={conversationId}
                 comment={comment.text}
                 commentIndex={commentIndex}
                 commentId={comment.id}
@@ -300,6 +300,7 @@ ${greetingsAfter}`);
           })}
         {publicComments &&
           selfVotes &&
+          selfVotes.results &&
           publicComments.results.length === selfVotes.results.length && (
             <ConversationVisualizationView />
           )}
