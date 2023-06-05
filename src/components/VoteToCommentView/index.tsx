@@ -243,9 +243,10 @@ export const VoteToCommentView: React.FC<{
               borderRadius: "4px",
             }}
           >
-            {Array.from({ length: upVoteCount }).map(() => {
+            {Array.from({ length: upVoteCount }).map((item, idx) => {
               return (
                 <div
+                  key={`comment-${commentIndex}-upvote-${idx}`}
                   style={{
                     flexGrow: 1,
                     backgroundColor: "green",
@@ -258,9 +259,10 @@ export const VoteToCommentView: React.FC<{
                 </div>
               );
             })}
-            {Array.from({ length: downVoteCount }).map(() => {
+            {Array.from({ length: downVoteCount }).map((item, idx) => {
               return (
                 <div
+                  key={`comment-${commentIndex}-upvote-${idx}`}
                   style={{
                     flexGrow: 1,
                     backgroundColor: "red",
@@ -274,9 +276,10 @@ export const VoteToCommentView: React.FC<{
                 </div>
               );
             })}
-            {Array.from({ length: noVoteCount }).map(() => {
+            {Array.from({ length: noVoteCount }).map((item, idx) => {
               return (
                 <div
+                  key={`comment-${commentIndex}-upvote-${idx}`}
                   style={{
                     flexGrow: 1,
                     backgroundColor: "gray",
