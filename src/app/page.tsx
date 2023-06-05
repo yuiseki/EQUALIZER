@@ -68,26 +68,26 @@ export default function Home() {
     jsonFetcher
   );
   const {
-    data: comments,
-    error: commentError,
-    mutate: mutateComments,
+    data: publicComments,
+    error: publicCommentError,
+    mutate: mutatePublicComments,
   } = useSWR("/api/public/comments", jsonFetcher);
   const {
-    data: votes,
-    error: votesError,
-    mutate: mutateVotes,
+    data: selfVotes,
+    error: selfVotesError,
+    mutate: mutateSelfVotes,
   } = useSWR("/api/self/votes", jsonFetcher);
   useEffect(() => {
-    if (!users || !comments || !votes) {
+    if (!users || !publicComments || !selfVotes) {
       return;
     }
     const greetingsInfo = `
-現在、この議題に対して ${users.count}名 のユーザーが議論に参加し、 ${comments.count}件 の意見が集まっています。
+現在、この議題に対して ${users.count}名 のユーザーが議論に参加し、 ${publicComments.count}件 の意見が集まっています。
 `;
     setGreetings(`${greetingsBefore}
 ${greetingsInfo}
 ${greetingsAfter}`);
-  }, [comments, users, votes]);
+  }, [publicComments, users, selfVotes]);
 
   // dialogue state
   const [dialogueList, setDialogueList] = useState<DialogueElement[]>([]);
@@ -234,11 +234,11 @@ ${greetingsAfter}`);
     const json = await res.json();
     console.log(json);
     await sleep(500);
-    await mutateComments();
+    await mutatePublicComments();
     setRequesting(false);
     await sleep(200);
     scrollToBottom();
-  }, [inputText, mutateComments]);
+  }, [inputText, mutatePublicComments]);
 
   const onSubmitNewVote = useCallback(
     async (commentId: string, value: number) => {
@@ -248,9 +248,9 @@ ${greetingsAfter}`);
       });
       const json = await res.json();
       console.log(json);
-      mutateVotes();
+      mutateSelfVotes();
     },
-    [mutateVotes]
+    [mutateSelfVotes]
   );
 
   const [mounted, setMounted] = useState(false);
@@ -302,10 +302,10 @@ ${greetingsAfter}`);
           );
         })}
         {user &&
-          comments &&
-          votes &&
-          comments.results.map((comment: any, commentIndex: number) => {
-            const filteredVotes = votes?.results?.filter(
+          publicComments &&
+          selfVotes &&
+          publicComments.results.map((comment: any, commentIndex: number) => {
+            const filteredVotes = selfVotes?.results?.filter(
               (vote: any) => vote.commentId === comment.id
             );
             const vote =
@@ -330,15 +330,15 @@ ${greetingsAfter}`);
             responding ||
             lazyInserting ||
             !user ||
-            !comments ||
-            !votes ||
-            comments.results.length !== votes.results.length
+            !publicComments ||
+            !selfVotes ||
+            publicComments.results.length !== selfVotes.results.length
           }
           placeholder={
             !user ||
-            !comments ||
-            !votes ||
-            comments.results.length !== votes.results.length
+            !publicComments ||
+            !selfVotes ||
+            publicComments.results.length !== selfVotes.results.length
               ? "すべての意見の考えを教えていただけると、あなたの意見を追加できます"
               : "あなたの意見を追加する"
           }
