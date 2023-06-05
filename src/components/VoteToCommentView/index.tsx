@@ -112,13 +112,14 @@ export const VoteToCommentView: React.FC<{
           style={{
             marginTop: "25px",
             width: "100%",
-            display: "flex",
-            justifyContent: "space-between",
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "40px",
           }}
         >
           <button
             style={{
-              padding: "6px",
+              padding: "4px",
               borderRadius: "4px",
               border: `${
                 voted
@@ -150,7 +151,7 @@ export const VoteToCommentView: React.FC<{
           </button>
           <button
             style={{
-              padding: "6px",
+              padding: "4px",
               borderRadius: "4px",
               border: `${
                 voted
@@ -182,7 +183,7 @@ export const VoteToCommentView: React.FC<{
           </button>
           <button
             style={{
-              padding: "6px",
+              padding: "4px",
               borderRadius: "4px",
               border: `${
                 voted
@@ -216,17 +217,41 @@ export const VoteToCommentView: React.FC<{
         {voted && (
           <div
             style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3, 1fr)",
+              marginTop: "15px",
+              opacity: 0.8,
+            }}
+          >
+            <div style={{ flexGrow: 1 }}>賛成：{upVoteCount}件</div>
+            <div style={{ flexGrow: 1, textAlign: "center" }}>
+              反対：{downVoteCount}件
+            </div>
+            <div style={{ flexGrow: 1, textAlign: "end" }}>
+              わからない/どちらでもない：{noVoteCount}件
+            </div>
+          </div>
+        )}
+        {voted && (
+          <div
+            style={{
               display: "flex",
-              flexGrow: "space-between",
+              justifyContent: "space-between",
               marginTop: "15px",
               maxHeight: "10px",
               opacity: 0.8,
+              borderRadius: "4px",
             }}
           >
             {Array.from({ length: upVoteCount }).map(() => {
               return (
                 <div
-                  style={{ flexGrow: 1, backgroundColor: "green" }}
+                  style={{
+                    flexGrow: 1,
+                    backgroundColor: "green",
+                    borderRadius: "4px",
+                    margin: "0 4px",
+                  }}
                   title={`賛成：${upVoteCount}`}
                 >
                   &nbsp;
@@ -236,8 +261,14 @@ export const VoteToCommentView: React.FC<{
             {Array.from({ length: downVoteCount }).map(() => {
               return (
                 <div
-                  style={{ flexGrow: 1, backgroundColor: "red", opacity: 0.6 }}
-                  title={`反対：${downVoteCount}}`}
+                  style={{
+                    flexGrow: 1,
+                    backgroundColor: "red",
+                    borderRadius: "4px",
+                    margin: "0 4px",
+                    opacity: 0.6,
+                  }}
+                  title={`反対：${downVoteCount}`}
                 >
                   &nbsp;
                 </div>
@@ -246,7 +277,12 @@ export const VoteToCommentView: React.FC<{
             {Array.from({ length: noVoteCount }).map(() => {
               return (
                 <div
-                  style={{ flexGrow: 1, backgroundColor: "gray" }}
+                  style={{
+                    flexGrow: 1,
+                    backgroundColor: "gray",
+                    borderRadius: "4px",
+                    margin: "0 4px",
+                  }}
                   title={`わからない/どちらでもない：${noVoteCount}`}
                 >
                   &nbsp;
