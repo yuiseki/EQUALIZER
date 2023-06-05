@@ -46,7 +46,7 @@ export const VoteToCommentView: React.FC<{
   return (
     <div
       className={`${styles.voteToCommentView} ${styles.voteToCommentViewAssistant}`}
-      style={{ opacity: `${voted ? 0.8 : 1}` }}
+      style={{ opacity: `${voted ? 0.9 : 1}` }}
     >
       <div className="avatarIconWrap">
         <AvatarIcon who={"assistant"} />
@@ -220,7 +220,7 @@ export const VoteToCommentView: React.FC<{
               flexGrow: "space-between",
               marginTop: "15px",
               maxHeight: "10px",
-              opacity: 0.6,
+              opacity: 0.4,
             }}
           >
             {Array.from({ length: upVoteCount }).map(() => {
