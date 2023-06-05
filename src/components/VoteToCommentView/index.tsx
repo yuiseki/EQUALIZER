@@ -342,7 +342,11 @@ export const VoteToCommentView: React.FC<{
           </div>
         )}
         {conversationId && (
-          <div>
+          <div
+            style={{
+              marginTop: "15px",
+            }}
+          >
             <Link
               href={`/conversations/${conversationId}/comments/${commentId}`}
             >

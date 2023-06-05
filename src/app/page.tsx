@@ -13,6 +13,7 @@ import useSWR from "swr";
 import { jsonFetcher } from "@/utils/jsonFetcher";
 import { VoteToCommentView } from "@/components/VoteToCommentView";
 import { ConversationVisualizationView } from "@/components/ConversationVisualizationView";
+import { ConversationView } from "@/components/ConversationView";
 
 const themes = `
 現在、以下の議題への参加をお待ちしています。
@@ -32,10 +33,10 @@ const themes = `
 const greetingsBefore = `ようこそ。私は対話型熟議促進人類包摂支援システム「イコライザー」です。
 重要な議論に参加していただけませんか？あなたの協力が必要です。
 
-現在の議題は「ChatGPTのようなAIアシスタントの、ユーザーの趣味嗜好に合わせたパーソナライゼーションは、どこまで進めるべきだとお考えですか？このプロセスに境界線があるとすれば、それはどのようなものでしょうか？」です。`;
+現在、以下の議題が展開されています。`;
 
 const greetingsAfter =
-  "ぜひ、あなたの考えを教えてください。ご協力をお願いします！";
+  "ぜひ、あなたの考えを教えてください。ご協力をお願いします。";
 
 export default function Home() {
   const { data: userData, error: userDataError } = useSWR(
@@ -63,39 +64,19 @@ export default function Home() {
   const [inputText, setInputText] = useState("");
 
   // api data
-  const { data: users, error: userError } = useSWR(
-    "/api/public/users",
-    jsonFetcher
-  );
+
   const {
-    data: publicComments,
-    error: publicCommentError,
-    mutate: mutatePublicComments,
-  } = useSWR("/api/public/comments", jsonFetcher);
-  const {
-    data: selfVotes,
-    error: selfVotesError,
-    mutate: mutateSelfVotes,
-  } = useSWR("/api/self/votes", jsonFetcher);
-  const {
-    data: publicVotes,
-    error: publicVotesError,
-    mutate: mutatePublicVotes,
-  } = useSWR("/api/public/votes", jsonFetcher);
+    data: publicConversations,
+    error: publicConversationsError,
+    mutate: mutatePublicConversations,
+  } = useSWR("/api/public/conversations", jsonFetcher);
 
   // initialize greetings
   const [greetings, setGreetings] = useState<string | undefined>();
   useEffect(() => {
-    if (!users || !publicComments || !selfVotes) {
-      return;
-    }
-    const greetingsInfo = `
-現在、この議題に対して ${users.count}名 のユーザーが議論に参加し、 ${publicComments.count}件 の意見が集まっています。
-`;
     setGreetings(`${greetingsBefore}
-${greetingsInfo}
 ${greetingsAfter}`);
-  }, [publicComments, users, selfVotes]);
+  }, []);
 
   // dialogue state
   const [dialogueList, setDialogueList] = useState<DialogueElement[]>([]);
@@ -169,42 +150,8 @@ ${greetingsAfter}`);
   const [pastMessages, setPastMessages] = useState<
     { messages: Array<any> } | undefined
   >();
-  const onSubmit = useCallback(async () => {
-    setResponding(true);
 
-    const newInputText = inputText.trim();
-    setInputText("");
-    console.log(newInputText);
-    insertNewDialogue({
-      who: "user",
-      text: newInputText,
-    });
-    await sleep(200);
-    scrollToBottom();
-
-    setResponding(true);
-    setRequesting(true);
-    const surfaceRes = await nextPostJson("/api/ai/surface", {
-      query: newInputText,
-      pastMessages: pastMessages ? JSON.stringify(pastMessages) : undefined,
-    });
-
-    const surfaceResJson: {
-      surface: string;
-      history: { messages: Array<any> };
-    } = await surfaceRes.json();
-    setPastMessages(surfaceResJson.history);
-    insertNewDialogue(
-      {
-        who: "assistant",
-        text: surfaceResJson.surface,
-      },
-      true
-    );
-    setResponding(false);
-  }, [inputText, insertNewDialogue, pastMessages]);
-
-  const onSubmitNewComment = useCallback(async () => {
+  const onSubmitNewConversation = useCallback(async () => {
     const newInputText = inputText.trim();
     setInputText("");
     console.log(newInputText);
@@ -216,24 +163,11 @@ ${greetingsAfter}`);
     const json = await res.json();
     console.log(json);
     await sleep(500);
-    await mutatePublicComments();
+    await mutatePublicConversations();
     setRequesting(false);
     await sleep(200);
     scrollToBottom();
-  }, [inputText, mutatePublicComments]);
-
-  const onSubmitNewVote = useCallback(
-    async (commentId: string, value: number) => {
-      const res = await nextPostJson("/api/self/votes", {
-        commentId: commentId,
-        value: value,
-      });
-      const json = await res.json();
-      console.log(json);
-      mutateSelfVotes();
-    },
-    [mutateSelfVotes]
-  );
+  }, [inputText, mutatePublicConversations]);
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -283,64 +217,32 @@ ${greetingsAfter}`);
             />
           );
         })}
-        {user &&
-          publicComments &&
-          selfVotes &&
-          publicComments.results.map((comment: any, commentIndex: number) => {
-            const filteredSelfVotes = selfVotes?.results?.filter(
-              (vote: any) => vote.commentId === comment.id
-            );
-            const selfVote =
-              filteredSelfVotes?.length === 1
-                ? filteredSelfVotes[0]
-                : undefined;
-            const filteredPublicVotes = publicVotes?.results?.filter(
-              (vote: any) => vote.commentId === comment.id
-            );
+        {publicConversations &&
+          publicConversations.results.map((conversation: any) => {
             return (
-              <VoteToCommentView
-                key={commentIndex}
-                comment={comment.text}
-                commentIndex={commentIndex}
-                commentId={comment.id}
-                vote={selfVote}
-                voteResults={filteredPublicVotes}
-                onVote={onSubmitNewVote}
-                isLoggedIn={!!user}
+              <ConversationView
+                key={conversation.id}
+                conversation={conversation}
               />
             );
           })}
-        {publicComments &&
-          selfVotes &&
-          publicComments.results.length === selfVotes.results.length && (
-            <ConversationVisualizationView />
-          )}
       </div>
+      {/* 
       <div className={styles.textInputWrap}>
         <TextInput
           textareaRef={textareaRef}
-          disabled={
-            requesting ||
-            responding ||
-            lazyInserting ||
-            !user ||
-            !publicComments ||
-            !selfVotes ||
-            publicComments.results.length !== selfVotes.results.length
-          }
+          disabled={requesting || responding || lazyInserting || !user}
           placeholder={
-            !user ||
-            !publicComments ||
-            !selfVotes ||
-            publicComments.results.length !== selfVotes.results.length
-              ? "すべての意見の考えを教えていただけると、あなたの意見を追加できます"
-              : "あなたの意見を追加する"
+            !user
+              ? "ログインすると、議題を追加できます"
+              : "新たな議題を追加する"
           }
           inputText={inputText}
           setInputText={setInputText}
-          onSubmit={onSubmitNewComment}
+          onSubmit={onSubmitNewConversation}
         />
       </div>
+      */}
     </main>
   );
 }
