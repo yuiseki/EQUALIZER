@@ -10,6 +10,7 @@ export async function GET(request: Request) {
       createdAt: true,
       updatedAt: true,
       id: true,
+      commentId: true,
       value: true,
       userId: true,
     },
