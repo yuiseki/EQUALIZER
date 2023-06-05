@@ -35,7 +35,7 @@ export default function Page({
     error: publicCommentError,
     mutate: mutatePublicComments,
   } = useSWR(
-    `/api/public/conversations/${conversationId}/comments`,
+    `/api/public/conversations/${conversationId}/comments/${commentId}`,
     jsonFetcher
   );
   const {

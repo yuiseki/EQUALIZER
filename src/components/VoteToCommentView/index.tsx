@@ -342,7 +342,7 @@ export const VoteToCommentView: React.FC<{
             })}
           </div>
         )}
-        {conversationId && (
+        {conversationId && commentId && (
           <div
             style={{
               marginTop: "15px",
