@@ -2,19 +2,33 @@
 import { DialogueElement } from "@/types/DialogueElement";
 import { AvatarIcon } from "@/components/AvatarIcon";
 import styles from "./styles.module.css";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 export const VoteToCommentView: React.FC<{
   comment: string;
   commentIndex: number;
   commentId: string;
   vote: any;
+  voteResults: any;
   onVote: (commentId: string, value: number) => void;
-}> = ({ comment, commentIndex, commentId, vote, onVote }) => {
+}> = ({ comment, commentIndex, commentId, vote, voteResults, onVote }) => {
   const [voted, setVoted] = useState(!!vote);
   const [votedValue, setVotedValue] = useState<number | undefined>(
     vote ? vote.value : undefined
   );
+  const totalVoteCount = useMemo(() => {
+    return voteResults.length;
+  }, []);
+  const upVoteCount = useMemo(() => {
+    return voteResults.filter((vote: any) => vote.value === -1).length;
+  }, []);
+  const downVoteCount = useMemo(() => {
+    return voteResults.filter((vote: any) => vote.value === 1).length;
+  }, []);
+  const noVoteCount = useMemo(() => {
+    return voteResults.filter((vote: any) => vote.value === 0).length;
+  }, []);
+  console.log(totalVoteCount, upVoteCount, downVoteCount, noVoteCount);
   const onClickUpVote = useCallback(() => {
     setVoted(true);
     setVotedValue(-1);
@@ -200,6 +214,48 @@ export const VoteToCommentView: React.FC<{
             🤔 わからない/どちらでもない
           </button>
         </div>
+        {voted && (
+          <div
+            style={{
+              display: "flex",
+              flexGrow: "space-between",
+              marginTop: "15px",
+              maxHeight: "10px",
+              opacity: 0.6,
+            }}
+          >
+            {Array.from({ length: upVoteCount }).map(() => {
+              return (
+                <div
+                  style={{ flexGrow: 1, backgroundColor: "green" }}
+                  title={`賛成：${upVoteCount}`}
+                >
+                  &nbsp;
+                </div>
+              );
+            })}
+            {Array.from({ length: downVoteCount }).map(() => {
+              return (
+                <div
+                  style={{ flexGrow: 1, backgroundColor: "red" }}
+                  title={`反対：${downVoteCount}}`}
+                >
+                  &nbsp;
+                </div>
+              );
+            })}
+            {Array.from({ length: noVoteCount }).map(() => {
+              return (
+                <div
+                  style={{ flexGrow: 1, backgroundColor: "gray" }}
+                  title={`わからない/どちらでもない：${noVoteCount}`}
+                >
+                  &nbsp;
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

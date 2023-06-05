@@ -61,8 +61,7 @@ export default function Home() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [inputText, setInputText] = useState("");
 
-  // initialize greetings
-  const [greetings, setGreetings] = useState<string | undefined>();
+  // api data
   const { data: users, error: userError } = useSWR(
     "/api/public/users",
     jsonFetcher
@@ -77,6 +76,14 @@ export default function Home() {
     error: selfVotesError,
     mutate: mutateSelfVotes,
   } = useSWR("/api/self/votes", jsonFetcher);
+  const {
+    data: publicVotes,
+    error: publicVotesError,
+    mutate: mutatePublicVotes,
+  } = useSWR("/api/public/votes", jsonFetcher);
+
+  // initialize greetings
+  const [greetings, setGreetings] = useState<string | undefined>();
   useEffect(() => {
     if (!users || !publicComments || !selfVotes) {
       return;
@@ -305,18 +312,24 @@ ${greetingsAfter}`);
           publicComments &&
           selfVotes &&
           publicComments.results.map((comment: any, commentIndex: number) => {
-            const filteredVotes = selfVotes?.results?.filter(
+            const filteredSelfVotes = selfVotes?.results?.filter(
               (vote: any) => vote.commentId === comment.id
             );
-            const vote =
-              filteredVotes?.length === 1 ? filteredVotes[0] : undefined;
+            const selfVote =
+              filteredSelfVotes?.length === 1
+                ? filteredSelfVotes[0]
+                : undefined;
+            const filteredPublicVotes = publicVotes?.results?.filter(
+              (vote: any) => vote.commentId === comment.id
+            );
             return (
               <VoteToCommentView
                 key={commentIndex}
                 comment={comment.text}
                 commentIndex={commentIndex}
                 commentId={comment.id}
-                vote={vote}
+                vote={selfVote}
+                voteResults={filteredPublicVotes}
                 onVote={onSubmitNewVote}
               />
             );
