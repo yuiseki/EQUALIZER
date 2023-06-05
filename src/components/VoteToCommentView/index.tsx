@@ -18,16 +18,16 @@ export const VoteToCommentView: React.FC<{
   );
   const totalVoteCount = useMemo(() => {
     return voteResults.length;
-  }, []);
+  }, [voteResults]);
   const upVoteCount = useMemo(() => {
     return voteResults.filter((vote: any) => vote.value === -1).length;
-  }, []);
+  }, [voteResults]);
   const downVoteCount = useMemo(() => {
     return voteResults.filter((vote: any) => vote.value === 1).length;
-  }, []);
+  }, [voteResults]);
   const noVoteCount = useMemo(() => {
     return voteResults.filter((vote: any) => vote.value === 0).length;
-  }, []);
+  }, [voteResults]);
   const onClickUpVote = useCallback(() => {
     setVoted(true);
     setVotedValue(-1);
