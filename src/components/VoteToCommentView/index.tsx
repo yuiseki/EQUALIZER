@@ -28,7 +28,6 @@ export const VoteToCommentView: React.FC<{
   const noVoteCount = useMemo(() => {
     return voteResults.filter((vote: any) => vote.value === 0).length;
   }, []);
-  console.log(totalVoteCount, upVoteCount, downVoteCount, noVoteCount);
   const onClickUpVote = useCallback(() => {
     setVoted(true);
     setVotedValue(-1);
