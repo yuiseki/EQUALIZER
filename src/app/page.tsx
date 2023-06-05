@@ -12,6 +12,7 @@ import styles from "./page.module.css";
 import useSWR from "swr";
 import { jsonFetcher } from "@/utils/jsonFetcher";
 import { VoteToCommentView } from "@/components/VoteToCommentView";
+import { ConversationVisualizationView } from "@/components/ConversationVisualizationView";
 
 const themes = `
 現在、以下の議題への参加をお待ちしています。
@@ -334,6 +335,11 @@ ${greetingsAfter}`);
               />
             );
           })}
+        {publicComments &&
+          selfVotes &&
+          publicComments.results.length === selfVotes.results.length && (
+            <ConversationVisualizationView />
+          )}
       </div>
       <div className={styles.textInputWrap}>
         <TextInput
