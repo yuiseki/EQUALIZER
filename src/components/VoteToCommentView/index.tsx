@@ -11,7 +11,18 @@ export const VoteToCommentView: React.FC<{
   vote: any;
   voteResults: any;
   onVote: (commentId: string, value: number) => void;
-}> = ({ comment, commentIndex, commentId, vote, voteResults, onVote }) => {
+  isLoggedIn: boolean;
+  isPreview?: boolean;
+}> = ({
+  comment,
+  commentIndex,
+  commentId,
+  vote,
+  voteResults,
+  onVote,
+  isLoggedIn,
+  isPreview,
+}) => {
   const [voted, setVoted] = useState(!!vote);
   const [votedValue, setVotedValue] = useState<number | undefined>(
     vote ? vote.value : undefined
@@ -83,7 +94,7 @@ export const VoteToCommentView: React.FC<{
             );
           })}
         </div>
-        {voted ? (
+        {isLoggedIn && voted ? (
           <div
             className="voteToCommentTextRow"
             style={{
@@ -214,7 +225,7 @@ export const VoteToCommentView: React.FC<{
             🤔 わからない/どちらでもない
           </button>
         </div>
-        {voted && (
+        {(voted || isPreview) && (
           <div
             style={{
               display: "grid",
@@ -232,7 +243,7 @@ export const VoteToCommentView: React.FC<{
             </div>
           </div>
         )}
-        {voted && (
+        {(voted || isPreview) && (
           <div
             style={{
               display: "flex",

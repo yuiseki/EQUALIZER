@@ -306,6 +306,7 @@ ${greetingsAfter}`);
                 vote={selfVote}
                 voteResults={filteredPublicVotes}
                 onVote={onSubmitNewVote}
+                isLoggedIn={!!user}
               />
             );
           })}
