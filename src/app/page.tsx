@@ -202,33 +202,7 @@ ${greetingsAfter}`);
       true
     );
     setResponding(false);
-
-    /*
-    setRequesting(true);
-    const innerRes = await nextPostJson("/api/ai/inner", {
-      pastMessages: JSON.stringify(surfaceResJson.history),
-    });
-    const innerResJson = await innerRes.json();
-    console.log(innerResJson);
-    // TODO: process innerResJson
-    // TODO: request to /api/ai/deep
-    setResponding(false);
-    setRequesting(false);
-    */
   }, [inputText, insertNewDialogue, pastMessages]);
-
-  // プロトタイプでは使わない
-  /*
-  const onSubmitNewConversation = useCallback(async () => {
-    const res = await nextPostJson("/api/self/conversations", {
-      topic: "AIアシスタントのパーソナライゼーションはどこまでやるべきか？",
-      description:
-        "ChatGPTのようなAIアシスタントの、ユーザーの趣味嗜好に合わせたパーソナライゼーションはどこまでやるべきだと思うか？",
-    });
-    const json = await res.json();
-    console.log(json);
-  }, []);
-  */
 
   const onSubmitNewComment = useCallback(async () => {
     const newInputText = inputText.trim();
