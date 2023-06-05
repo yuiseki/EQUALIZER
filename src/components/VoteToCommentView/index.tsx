@@ -4,6 +4,7 @@ import { AvatarIcon } from "@/components/AvatarIcon";
 import styles from "./styles.module.css";
 import { useCallback, useMemo, useState } from "react";
 import Link from "next/link";
+import { TweetButton } from "../TweetButton";
 
 export const VoteToCommentView: React.FC<{
   conversationId?: string;
@@ -358,6 +359,24 @@ export const VoteToCommentView: React.FC<{
                 permalink
               </span>
             </Link>
+          </div>
+        )}
+        {isPreview && voted && (
+          <div
+            style={{
+              width: "120px",
+              margin: "25px auto 0",
+            }}
+          >
+            <TweetButton
+              text={`「${comment}」に、「${
+                vote.value === -1
+                  ? "賛成"
+                  : vote.value === 1
+                  ? "反対"
+                  : "わからない/どちらでもない"
+              }」と投票しました`}
+            />
           </div>
         )}
       </div>
