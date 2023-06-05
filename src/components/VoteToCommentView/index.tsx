@@ -220,7 +220,7 @@ export const VoteToCommentView: React.FC<{
               flexGrow: "space-between",
               marginTop: "15px",
               maxHeight: "10px",
-              opacity: 0.4,
+              opacity: 0.8,
             }}
           >
             {Array.from({ length: upVoteCount }).map(() => {
@@ -236,7 +236,7 @@ export const VoteToCommentView: React.FC<{
             {Array.from({ length: downVoteCount }).map(() => {
               return (
                 <div
-                  style={{ flexGrow: 1, backgroundColor: "red" }}
+                  style={{ flexGrow: 1, backgroundColor: "red", opacity: 0.6 }}
                   title={`反対：${downVoteCount}}`}
                 >
                   &nbsp;
