@@ -222,7 +222,7 @@ ${greetingsAfter}`);
             return (
               <ConversationView
                 key={conversation.id}
-                conversation={conversation}
+                conversationId={conversation.id}
               />
             );
           })}

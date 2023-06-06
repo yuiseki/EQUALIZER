@@ -5,6 +5,7 @@ import useSWR from "swr";
 import styles from "./styles.module.css";
 import { useEffect, useState } from "react";
 import { TweetButton } from "@/components/TweetButton";
+import { ConversationView } from "@/components/ConversationView";
 
 export default function Page({
   params: { conversationId, commentId },
@@ -65,6 +66,7 @@ export default function Page({
   }
   return (
     <main className={styles.main}>
+      <ConversationView conversationId={conversationId} />
       <VoteToCommentView
         comment={publicComments.results[0].text}
         commentIndex={1}

@@ -12,6 +12,7 @@ import { DialogueElementView } from "@/components/DialogueElementView";
 import { VoteToCommentView } from "@/components/VoteToCommentView";
 import { TextInput } from "@/components/TextInput";
 import { ConversationVisualizationView } from "@/components/ConversationVisualizationView";
+import { ConversationView } from "@/components/ConversationView";
 
 const greetingsBefore = `ようこそ。私は対話型熟議促進人類包摂支援システム「イコライザー」です。
 重要な議論に参加していただけませんか？あなたの協力が必要です。
@@ -257,6 +258,7 @@ ${greetingsAfter}`);
           margin: "0 auto 5em",
         }}
       >
+        <ConversationView conversationId={conversationId} />
         {dialogueList.map((dialogueElement, dialogueIndex) => {
           return (
             <DialogueElementView
