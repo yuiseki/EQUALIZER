@@ -13,6 +13,7 @@ import { VoteToCommentView } from "@/components/VoteToCommentView";
 import { TextInput } from "@/components/TextInput";
 import { ConversationVisualizationView } from "@/components/ConversationVisualizationView";
 import { ConversationView } from "@/components/ConversationView";
+import Link from "next/link";
 
 const greetingsBefore = `ようこそ。私は対話型熟議促進人類包摂支援システム「イコライザー」です。
 重要な議論に参加していただけませんか？あなたの協力が必要です。
@@ -92,7 +93,7 @@ export default function Page({
       return;
     }
     const greetingsInfo = `
-現在、この議題に対して ${publicComments.users.length}名 のユーザーが議論に参加し、 ${publicComments.count}件 の意見が集まっています。
+現在、この議題に対して ${publicComments.users.length}名 のユーザーが議論に参加し、 ${publicComments.results.length}件 の意見が集まっています。
 `;
     setGreetings(`${greetingsBefore}
 ${greetingsInfo}
@@ -264,6 +265,15 @@ ${greetingsAfter}`);
 
   return (
     <main className={styles.main}>
+      <Link href={`/`}>
+        <h1
+          style={{
+            textDecoration: "underline",
+          }}
+        >
+          イコライザー
+        </h1>
+      </Link>
       <ConversationView conversationId={conversationId} />
       <div
         className="dialogueListWrap"
@@ -288,6 +298,7 @@ ${greetingsAfter}`);
         })}
         {publicComments &&
           selfVotes &&
+          0 < publicComments.results.length &&
           publicComments.results.map((comment: any, commentIndex: number) => {
             const filteredSelfVotes = selfVotes?.results?.filter(
               (vote: any) => vote.commentId === comment.id
@@ -311,9 +322,11 @@ ${greetingsAfter}`);
             );
           })}
       </div>
-      <div className={styles.visualizationWrap}>
-        <ConversationVisualizationView conversationId={conversationId} />
-      </div>
+      {publicComments && selfVotes && 0 < publicComments.results.length && (
+        <div className={styles.visualizationWrap}>
+          <ConversationVisualizationView conversationId={conversationId} />
+        </div>
+      )}
       <div className={styles.textInputWrap}>
         <TextInput
           textareaRef={textareaRef}

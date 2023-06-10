@@ -30,9 +30,9 @@ export async function POST(request: Request, response: Response) {
     return NextResponse.json({ error: "Not Authorized" }, { status: 401 });
   }
 
-  const res = await request.json();
-  const commentId = res.commentId;
-  const value = res.value as number;
+  const reqJson = await request.json();
+  const commentId = reqJson.commentId;
+  const value = reqJson.value as number;
 
   const results = await prisma.vote.create({
     data: {

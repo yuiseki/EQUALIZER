@@ -156,9 +156,9 @@ ${greetingsAfter}`);
     setInputText("");
     console.log(newInputText);
     setRequesting(true);
-    const res = await nextPostJson("/api/self/comments", {
-      conversationId: "647c072b4ab980bc5113d52e",
-      text: newInputText,
+    const res = await nextPostJson("/api/self/conversations", {
+      topic: newInputText.split("\n")[0],
+      description: newInputText.split("\n")[1],
     });
     const json = await res.json();
     console.log(json);
@@ -227,14 +227,19 @@ ${greetingsAfter}`);
             );
           })}
       </div>
-      {/* 
       <div className={styles.textInputWrap}>
         <TextInput
           textareaRef={textareaRef}
-          disabled={requesting || responding || lazyInserting || !user}
+          disabled={
+            requesting ||
+            responding ||
+            lazyInserting ||
+            !user ||
+            user.email !== "yuiseki+ad@gmail.com"
+          }
           placeholder={
             !user
-              ? "ログインすると、議題を追加できます"
+              ? "モデレーターになると、議題を追加できます"
               : "新たな議題を追加する"
           }
           inputText={inputText}
@@ -242,7 +247,6 @@ ${greetingsAfter}`);
           onSubmit={onSubmitNewConversation}
         />
       </div>
-      */}
     </main>
   );
 }

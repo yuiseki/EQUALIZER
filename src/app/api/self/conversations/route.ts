@@ -30,9 +30,9 @@ export async function POST(request: Request, response: Response) {
     return NextResponse.json({ error: "Not Authorized" }, { status: 401 });
   }
 
-  const res = await request.json();
-  const topic = res.topic;
-  const description = res.description;
+  const reqJson = await request.json();
+  const topic = reqJson.topic;
+  const description = reqJson.description;
 
   const results = await prisma.conversation.create({
     data: {
