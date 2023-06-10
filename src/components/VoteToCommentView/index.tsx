@@ -374,7 +374,7 @@ export const VoteToCommentView: React.FC<{
                         ? "反対"
                         : "わからない/どちらでもない"
                     }」と投票しました`}
-                    url={`/conversations/${conversationId}/comments/${commentId}`}
+                    url={`https://equalizer.yuiseki.net/conversations/${conversationId}/comments/${commentId}`}
                   />
                 </div>
               )}
