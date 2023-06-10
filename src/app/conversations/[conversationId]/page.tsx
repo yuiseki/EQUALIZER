@@ -313,7 +313,7 @@ ${greetingsAfter}`);
                 commentIndex={commentIndex}
                 commentId={comment.id}
                 vote={selfVote}
-                voteResults={publicComments.results[0].votes}
+                voteResults={publicComments.results[commentIndex].votes}
                 onVote={onSubmitNewVote}
                 isLoggedIn={!!user}
               />
