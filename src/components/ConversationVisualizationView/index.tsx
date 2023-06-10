@@ -50,6 +50,10 @@ export const ConversationVisualizationView: React.FC<{
     const votedValues = publicComments.users.map((u) =>
       u.votes.map((v) => v.value)
     );
+    if (!votedValues) {
+      return;
+    }
+    console.log(votedValues);
     // mostDistantにしないとデタラメになる
     const kms = kmeans(votedValues, numberOfClusters, {
       initialization: "mostDistant",

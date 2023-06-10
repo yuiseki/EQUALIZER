@@ -34,13 +34,35 @@ export async function POST(request: Request, response: Response) {
   const commentId = reqJson.commentId;
   const value = reqJson.value as number;
 
-  const results = await prisma.vote.create({
-    data: {
+  const exists = await prisma.vote.findFirst({
+    where: {
       userId: user.id,
       commentId: commentId,
-      value: value,
     },
   });
+
+  let results;
+  if (exists) {
+    results = await prisma.vote.update({
+      where: {
+        id: exists.id,
+      },
+      data: {
+        userId: user.id,
+        commentId: commentId,
+        value: value,
+      },
+    });
+  } else {
+    results = await prisma.vote.create({
+      data: {
+        userId: user.id,
+        commentId: commentId,
+        value: value,
+      },
+    });
+  }
+
   return NextResponse.json({
     results,
   });

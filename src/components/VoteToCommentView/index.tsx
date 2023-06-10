@@ -174,7 +174,7 @@ export const VoteToCommentView: React.FC<{
                 opacity: `${voted ? (votedValue === -1 ? 0.8 : 0.5) : 1}`,
               }}
               onClick={onClickUpVote}
-              disabled={voted || !isLoggedIn}
+              disabled={!isLoggedIn}
             >
               ✅ 賛成
             </button>
@@ -206,7 +206,7 @@ export const VoteToCommentView: React.FC<{
                 opacity: `${voted ? (votedValue === 1 ? 0.8 : 0.5) : 1}`,
               }}
               onClick={onClickDownVote}
-              disabled={voted || !isLoggedIn}
+              disabled={!isLoggedIn}
             >
               🚫 反対
             </button>
@@ -238,7 +238,7 @@ export const VoteToCommentView: React.FC<{
                 opacity: `${voted ? (votedValue === 0 ? 0.8 : 0.5) : 1}`,
               }}
               onClick={onClickNoVote}
-              disabled={voted || !isLoggedIn}
+              disabled={!isLoggedIn}
             >
               🤔 わからない/どちらでもない
             </button>
