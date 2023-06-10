@@ -34,7 +34,7 @@ export const ConversationVisualizationView: React.FC<{
     votes: Array<Array<number>>;
   }>(`/api/public/conversations/${conversationId}/comments`, jsonFetcher);
 
-  const [numberOfClusters, setNumberOfClusters] = useState(4);
+  const [numberOfClusters, setNumberOfClusters] = useState(2);
   const [clusters, setClusters] = useState<
     Array<
       Array<{
