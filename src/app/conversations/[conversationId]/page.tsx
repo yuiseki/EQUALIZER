@@ -16,9 +16,7 @@ import { ConversationView } from "@/components/ConversationView";
 import Link from "next/link";
 
 const greetingsBefore = `ようこそ。私は対話型熟議促進人類包摂支援システム「イコライザー」です。
-重要な議論に参加していただけませんか？あなたの協力が必要です。
-
-現在の議題は「ChatGPTのようなAIアシスタントの、ユーザーの趣味嗜好に合わせたパーソナライゼーションは、どこまで進めるべきだとお考えですか？このプロセスに境界線があるとすれば、それはどのようなものでしょうか？」です。`;
+重要な議論に参加していただけませんか？あなたの協力が必要です。`;
 
 const greetingsAfter =
   "ぜひ、あなたの考えを教えてください。ご協力をお願いします！";

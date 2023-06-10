@@ -11,7 +11,7 @@ export const ConversationView: React.FC<{ conversationId: string }> = ({
     jsonFetcher
   );
   const [conversation, setConversation] = useState<
-    { id: string; topic: string } | undefined
+    { id: string; topic: string; description: string } | undefined
   >();
   useEffect(() => {
     if (conversationData && conversationData.results.length > 0) {
@@ -32,6 +32,7 @@ export const ConversationView: React.FC<{ conversationId: string }> = ({
         >
           {conversation.topic}
         </h2>
+        <p>{conversation.description}</p>
       </Link>
     </div>
   );
