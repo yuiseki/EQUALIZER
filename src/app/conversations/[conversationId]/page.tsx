@@ -60,7 +60,10 @@ export default function Page({
     data: publicComments,
     error: publicCommentError,
     mutate: mutatePublicComments,
-  } = useSWR("/api/public/comments", jsonFetcher);
+  } = useSWR(
+    `/api/public/conversations/${conversationId}/comments`,
+    jsonFetcher
+  );
   const {
     data: selfVotes,
     error: selfVotesError,

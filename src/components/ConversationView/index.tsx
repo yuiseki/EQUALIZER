@@ -6,7 +6,6 @@ import { jsonFetcher } from "@/utils/jsonFetcher";
 export const ConversationView: React.FC<{ conversationId: string }> = ({
   conversationId,
 }) => {
-  console.log(conversationId);
   const { data: conversationData } = useSWR(
     `/api/public/conversations/${conversationId}`,
     jsonFetcher
@@ -19,7 +18,6 @@ export const ConversationView: React.FC<{ conversationId: string }> = ({
       setConversation(conversationData.results[0]);
     }
   }, [conversationData]);
-  console.log(conversation);
 
   if (!conversationData || !conversation) {
     return;
