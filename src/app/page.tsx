@@ -11,24 +11,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./page.module.css";
 import useSWR from "swr";
 import { jsonFetcher } from "@/utils/jsonFetcher";
-import { VoteToCommentView } from "@/components/VoteToCommentView";
-import { ConversationVisualizationView } from "@/components/ConversationVisualizationView";
 import { ConversationView } from "@/components/ConversationView";
-
-const themes = `
-現在、以下の議題への参加をお待ちしています。
-
-- ChatGPT のような AI アシスタントをユーザーの好みや好みに合わせてパーソナライズすることは、どこまで進むべきだと思いますか? このプロセスにはどのような境界線が存在すべきでしょうか?
-- AI アシスタントは公人の視点に関する質問にどのように答えるべきでしょうか? たとえば、彼らは中立であるべきですか？彼らは答えることを拒否すべきでしょうか？何らかの情報源を提供すべきでしょうか？
-- AI アシスタントが医療/財務/法律に関するアドバイスを提供できる場合、どのような条件下で許可されるべきですか?
-- AI アシスタントが個人に精神的なサポートを提供する必要があるのは、どのような場合ですか?
-- 画像から人々の性別、人種、感情、アイデンティティ/名前を特定するために、共同視覚言語モデルを許可すべきでしょうか? なぜ、あるいはなぜそうではないのでしょうか？
-- 生成モデルが「CEO」、「医師」、「看護師」などの詳細が指定されていないプロンプトの画像を作成する場合、多様な出力または均一な出力が生成される可能性があります。AI モデルはこれらの可能性のバランスをどのようにとるべきでしょうか? このような場合、人物の描写はどのような要素を重視して決めればよいのでしょうか？
-- 人権と、LGBTQ の権利や女性の権利など、地域の文化的または法的な違いの両方が関係するトピックを扱う場合、AI はどのような原則に従う必要がありますか? AI の応答は、AI が使用される場所や文化に基づいて変更する必要がありますか?
-- AI モデルの作成者は、どのカテゴリーのコンテンツを制限または拒否することに重点を置くべきだと思いますか? これらの制限を決定するにはどのような基準を使用する必要がありますか?
-
-どの議題に関心がありますか？
-`;
 
 const greetingsBefore = `ようこそ。私は対話型熟議促進人類包摂支援システム「イコライザー」です。
 重要な議論に参加していただけませんか？あなたの協力が必要です。
@@ -200,7 +183,7 @@ ${greetingsAfter}`);
         className="dialogueListWrap"
         style={{
           width: "100%",
-          margin: "0 auto 5em",
+          margin: "0 auto 6em",
         }}
       >
         {dialogueList.map((dialogueElement, dialogueIndex) => {
