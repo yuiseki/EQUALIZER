@@ -68,6 +68,7 @@ export default function Page({
     <main className={styles.main}>
       <ConversationView conversationId={conversationId} />
       <VoteToCommentView
+        conversationId={conversationId}
         comment={publicComments.results[0].text}
         commentIndex={1}
         commentId={commentId}
