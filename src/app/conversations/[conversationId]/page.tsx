@@ -273,6 +273,7 @@ ${greetingsAfter}`);
             />
           );
         })}
+        <ConversationVisualizationView conversationId={conversationId} />
         {publicComments &&
           selfVotes &&
           publicComments.results.map((comment: any, commentIndex: number) => {
@@ -300,7 +301,6 @@ ${greetingsAfter}`);
               />
             );
           })}
-        <ConversationVisualizationView conversationId={conversationId} />
       </div>
       <div className={styles.textInputWrap}>
         <TextInput
