@@ -34,7 +34,7 @@ export const ConversationVisualizationView: React.FC<{
     votes: Array<Array<number>>;
   }>(`/api/public/conversations/${conversationId}/comments`, jsonFetcher);
 
-  const [numberOfClusters, setNumberOfClusters] = useState(2);
+  const [numberOfClusters, setNumberOfClusters] = useState(3);
   const [clusters, setClusters] = useState<
     Array<
       Array<{
@@ -47,22 +47,23 @@ export const ConversationVisualizationView: React.FC<{
     if (!publicComments) {
       return;
     }
-    const kms = kmeans(
-      publicComments.users.map((u) => u.votes.map((v) => v.value)),
-      numberOfClusters,
-      {}
+    const votedValues = publicComments.users.map((u) =>
+      u.votes.map((v) => v.value)
     );
+    // mostDistantにしないとデタラメになる
+    const kms = kmeans(votedValues, numberOfClusters, {
+      initialization: "mostDistant",
+      maxIterations: 10,
+    });
     const newClusters: Array<
       Array<{
         userId: string;
       }>
     > = Array.from({ length: numberOfClusters }, () => []);
     publicComments.users.map((user) => {
-      const distances = kms.centroids.map((centroid, centroidIdx) => {
-        const distance = kms.distance(
-          centroid,
-          user.votes.map((v) => v.value)
-        );
+      const votes = user.votes.map((v) => v.value);
+      const distances = kms.centroids.map((centroid) => {
+        const distance = kms.distance(centroid, votes);
         return distance;
       });
       const cluster = distances.indexOf(Math.min(...distances));

@@ -88,7 +88,7 @@ export async function GET(
     {
       count: count,
       results: results,
-      users: users,
+      users: users.sort((a, b) => (a.userId < b.userId ? -1 : 1)),
       votes: votes,
     },
     { status: 200 }
