@@ -51,43 +51,53 @@ export default function Page({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [inputText, setInputText] = useState("");
 
-  // api data
-  const { data: users, error: userError } = useSWR(
-    "/api/public/users",
-    jsonFetcher
-  );
   const {
     data: publicComments,
     error: publicCommentError,
     mutate: mutatePublicComments,
-  } = useSWR(
-    `/api/public/conversations/${conversationId}/comments`,
-    jsonFetcher
-  );
+  } = useSWR<{
+    count: number;
+    results: Array<{
+      id: string;
+      conversationId: string;
+      text: string;
+      votes: Array<{
+        id: string;
+        userId: string;
+        commentId: string;
+        value: number;
+      }>;
+    }>;
+    users: Array<{
+      userId: string;
+      votes: Array<{
+        commentId: string;
+        value: number;
+      }>;
+    }>;
+    votes: Array<Array<number>>;
+  }>(`/api/public/conversations/${conversationId}/comments`, jsonFetcher);
+
+  // TODO: conversationIdで絞り込む
   const {
     data: selfVotes,
     error: selfVotesError,
     mutate: mutateSelfVotes,
   } = useSWR("/api/self/votes", jsonFetcher);
-  const {
-    data: publicVotes,
-    error: publicVotesError,
-    mutate: mutatePublicVotes,
-  } = useSWR("/api/public/votes", jsonFetcher);
 
   // initialize greetings
   const [greetings, setGreetings] = useState<string | undefined>();
   useEffect(() => {
-    if (!users || !publicComments || !selfVotes) {
+    if (!publicComments || !selfVotes) {
       return;
     }
     const greetingsInfo = `
-現在、この議題に対して ${users.count}名 のユーザーが議論に参加し、 ${publicComments.count}件 の意見が集まっています。
+現在、この議題に対して ${publicComments.users.length}名 のユーザーが議論に参加し、 ${publicComments.count}件 の意見が集まっています。
 `;
     setGreetings(`${greetingsBefore}
 ${greetingsInfo}
 ${greetingsAfter}`);
-  }, [publicComments, users, selfVotes]);
+  }, [publicComments, selfVotes]);
 
   // dialogue state
   const [dialogueList, setDialogueList] = useState<DialogueElement[]>([]);
@@ -286,9 +296,6 @@ ${greetingsAfter}`);
               filteredSelfVotes?.length === 1
                 ? filteredSelfVotes[0]
                 : undefined;
-            const filteredPublicVotes = publicVotes?.results?.filter(
-              (vote: any) => vote.commentId === comment.id
-            );
             return (
               <VoteToCommentView
                 key={commentIndex}
@@ -297,7 +304,7 @@ ${greetingsAfter}`);
                 commentIndex={commentIndex}
                 commentId={comment.id}
                 vote={selfVote}
-                voteResults={filteredPublicVotes}
+                voteResults={publicComments.results[0].votes}
                 onVote={onSubmitNewVote}
                 isLoggedIn={!!user}
               />
