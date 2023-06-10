@@ -254,14 +254,14 @@ ${greetingsAfter}`);
 
   return (
     <main className={styles.main}>
+      <ConversationView conversationId={conversationId} />
       <div
         className="dialogueListWrap"
         style={{
           width: "100%",
-          margin: "0 auto 5em",
+          margin: "0 auto 10em",
         }}
       >
-        <ConversationView conversationId={conversationId} />
         {dialogueList.map((dialogueElement, dialogueIndex) => {
           return (
             <DialogueElementView
@@ -276,7 +276,6 @@ ${greetingsAfter}`);
             />
           );
         })}
-        <ConversationVisualizationView conversationId={conversationId} />
         {publicComments &&
           selfVotes &&
           publicComments.results.map((comment: any, commentIndex: number) => {
@@ -304,6 +303,9 @@ ${greetingsAfter}`);
               />
             );
           })}
+      </div>
+      <div className={styles.visualizationWrap}>
+        <ConversationVisualizationView conversationId={conversationId} />
       </div>
       <div className={styles.textInputWrap}>
         <TextInput
