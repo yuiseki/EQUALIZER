@@ -7,7 +7,7 @@ import { LLMChain } from "langchain/chains";
 import { OpenAI } from "langchain/llms/openai";
 dotenv.config();
 
-const directory = "tmp/twitter/yuiseki/vectorstores";
+const directory = "tmp/twitter/yuiseki_/vectorstores";
 const vectorStore = await HNSWLib.load(directory, new OpenAIEmbeddings());
 
 const questions = [

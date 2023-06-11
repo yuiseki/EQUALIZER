@@ -9,7 +9,7 @@ import fs from "node:fs/promises";
 import { parse } from "csv-parse/sync";
 
 const data = await fs.readFile(
-  "tmp/twitter/yuiseki/twilog/yuiseki_-230611.csv",
+  "tmp/twitter/yuiseki_/twilog/yuiseki_-230611.csv",
   "utf-8"
 );
 const records = parse(data);
@@ -46,5 +46,5 @@ console.log(docs.length);
 
 const vectorStore = await HNSWLib.fromDocuments(docs, new OpenAIEmbeddings());
 
-const directory = "tmp/twitter/yuiseki/vectorstores";
+const directory = "tmp/twitter/yuiseki_/vectorstores";
 await vectorStore.save(directory);
