@@ -211,7 +211,7 @@ ${greetingsAfter}`);
     console.log(newInputText);
     setRequesting(true);
     const res = await nextPostJson("/api/self/comments", {
-      conversationId: "647c072b4ab980bc5113d52e",
+      conversationId: conversationId,
       text: newInputText,
     });
     const json = await res.json();
@@ -221,7 +221,7 @@ ${greetingsAfter}`);
     setRequesting(false);
     await sleep(200);
     scrollToBottom();
-  }, [inputText, mutatePublicComments]);
+  }, [conversationId, inputText, mutatePublicComments]);
 
   const onSubmitNewVote = useCallback(
     async (commentId: string, value: number) => {
@@ -335,13 +335,13 @@ ${greetingsAfter}`);
             !user ||
             !publicComments ||
             !selfVotes ||
-            publicComments.results.length !== selfVotes.results.length
+            selfVotes.results.length < publicComments.results.length
           }
           placeholder={
             !user ||
             !publicComments ||
             !selfVotes ||
-            publicComments.results.length !== selfVotes.results.length
+            selfVotes.results.length < publicComments.results.length
               ? "すべての意見の考えを教えていただけると、あなたの意見を追加できます"
               : "あなたの意見を追加する"
           }

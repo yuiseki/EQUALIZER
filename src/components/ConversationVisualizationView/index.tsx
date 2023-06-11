@@ -50,7 +50,10 @@ export const ConversationVisualizationView: React.FC<{
     const votedValues = publicComments.users.map((u) =>
       u.votes.map((v) => v.value)
     );
-    if (!votedValues) {
+    if (!votedValues || votedValues.length === 0) {
+      return;
+    }
+    if (publicComments.users.length < numberOfClusters) {
       return;
     }
     // initializationを固定値にしないとデタラメになる

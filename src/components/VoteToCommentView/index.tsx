@@ -364,7 +364,7 @@ export const VoteToCommentView: React.FC<{
                   </span>
                 </Link>
               </div>
-              {voted && (
+              {voted && vote && (
                 <div>
                   <TweetButton
                     text={`「${comment}」に、「${
