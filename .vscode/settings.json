@@ -1,3 +1,13 @@
 {
-  "cSpell.words": ["kmeans", "langchain", "LGBTQ", "nextauth"]
+  "cSpell.words": [
+    "HNSW",
+    "hnswlib",
+    "kmeans",
+    "langchain",
+    "LGBTQ",
+    "nextauth",
+    "openai",
+    "twilog",
+    "vectorstores"
+  ]
 }
