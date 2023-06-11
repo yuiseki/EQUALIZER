@@ -53,10 +53,11 @@ export const ConversationVisualizationView: React.FC<{
     if (!votedValues) {
       return;
     }
-    console.log(votedValues);
-    // mostDistantにしないとデタラメになる
+    // initializationを固定値にしないとデタラメになる
     const kms = kmeans(votedValues, numberOfClusters, {
-      initialization: "mostDistant",
+      initialization: Array.from({ length: numberOfClusters }).map((u) =>
+        publicComments.results.map(() => 0)
+      ),
       maxIterations: 10,
     });
     const newClusters: Array<
