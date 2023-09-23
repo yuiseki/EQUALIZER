@@ -22,7 +22,7 @@
     "eslint": "8.45.0",
     "eslint-config-next": "13.5.1",
     "hnswlib-node": "^1.4.2",
-    "langchain": "^0.0.102",
+    "langchain": "^0.0.153",
     "ml-kmeans": "^6.0.0",
     "ml-pca": "^4.1.1",
     "next": "13.5.1",
