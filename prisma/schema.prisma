@@ -2,19 +2,20 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model Conversation {
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
-  id              String      @id @default(auto()) @map("_id") @db.ObjectId
-  userId          String      @db.ObjectId
+  id              String      @id @default(cuid())
+  userId          String
   user            User        @relation(fields: [userId], references: [id])
   topic           String
   description     String
@@ -25,10 +26,10 @@ model Conversation {
 model Comment {
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
-  id              String       @id @default(auto()) @map("_id") @db.ObjectId
-  userId          String       @db.ObjectId
+  id              String       @id @default(cuid())
+  userId          String
   user            User         @relation(fields: [userId], references: [id])
-  conversationId  String       @db.ObjectId
+  conversationId  String
   conversation    Conversation @relation(fields: [conversationId], references: [id])
   text            String
   votes           Vote[]
@@ -38,10 +39,10 @@ model Comment {
 model Vote {
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
-  id              String      @id @default(auto()) @map("_id") @db.ObjectId
-  userId          String      @db.ObjectId
+  id              String      @id @default(cuid())
+  userId          String
   user            User        @relation(fields: [userId], references: [id])
-  commentId       String      @db.ObjectId
+  commentId       String
   comment         Comment     @relation(fields: [commentId], references: [id])
   value           Int
   @@unique([commentId, userId])
@@ -51,7 +52,7 @@ model Vote {
 model User {
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
-  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  id              String      @id @default(cuid())
   name            String
   email           String      @unique
   emailVerified   DateTime?   @map("verifiedAt")
@@ -67,8 +68,8 @@ model User {
 model Account {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
-  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId             String  @db.ObjectId
+  id                 String  @id @default(cuid())
+  userId             String
   type               String?
   providerAccountId  String
   providerType       String?
@@ -86,18 +87,18 @@ model Account {
   @@unique([provider, providerAccountId])
   @@map("accounts")
 }
- 
+
 model Session {
-  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  id              String      @id @default(cuid())
   sessionToken    String      @unique
-  userId          String      @db.ObjectId
+  userId          String
   expires         DateTime    @map("expiresAt")
   user            User        @relation(fields: [userId], references: [id])
   @@map("sessions")
 }
- 
+
 model VerificationToken {
-  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  id              String      @id @default(cuid())
   identifier      String
   token           String      @unique
   expires         DateTime    @map("expiresAt")

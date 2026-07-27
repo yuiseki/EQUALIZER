@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "equalizer",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-07-27",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "equalizer",
+      "database_id": "d1b60bb1-fffb-49b2-9780-8bc5a5d4e67c"
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

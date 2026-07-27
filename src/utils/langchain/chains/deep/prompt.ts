@@ -1,4 +1,4 @@
-import { PromptTemplate } from "langchain/prompts";
+import { PromptTemplate } from "@langchain/core/prompts";
 
 export const EQUALIZER_DEEP_PROMPT = new PromptTemplate({
   template: `You are an expert OpenStreetMap and Overpass API. You output the best Overpass API query based on input text.

@@ -1,12 +1,11 @@
-import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { buildAuthOptions } from "@/pages/api/auth/[...nextauth]";
+import { getPrisma } from "@/lib/prisma";
 
-const prisma = new PrismaClient();
-
-export async function GET(request: Request, response: Response) {
-  const session = await getServerSession(authOptions);
+export async function GET(request: Request) {
+  const prisma = await getPrisma();
+  const session = await getServerSession(await buildAuthOptions());
   if (!session) {
     return NextResponse.json({ error: "Not Authorized" }, { status: 401 });
   }

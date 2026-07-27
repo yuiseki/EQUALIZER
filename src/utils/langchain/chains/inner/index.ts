@@ -1,15 +1,17 @@
-import { LLMChain } from "langchain/chains";
-import { BaseLanguageModel } from "langchain/dist/base_language";
 import { EQUALIZER_INNER_PROMPT } from "./prompt";
 
-export const loadEqualizerInnerChain = ({
+interface InvokableChatModel {
+  invoke(input: string): Promise<{ content: unknown }>;
+}
+
+export const runEqualizerInnerChain = async ({
   llm,
+  chat_history,
 }: {
-  llm: BaseLanguageModel;
-}): LLMChain => {
-  const chain = new LLMChain({
-    llm: llm,
-    prompt: EQUALIZER_INNER_PROMPT,
-  });
-  return chain;
+  llm: InvokableChatModel;
+  chat_history: string;
+}): Promise<{ text: string }> => {
+  const prompt = await EQUALIZER_INNER_PROMPT.format({ chat_history });
+  const result = await llm.invoke(prompt);
+  return { text: String(result.content) };
 };

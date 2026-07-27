@@ -1,17 +1,19 @@
 import { NextResponse } from "next/server";
-import { OpenAI } from "langchain/llms/openai";
-import { loadEqualizerInnerChain } from "@/utils/langchain/chains/inner";
+import { ChatOpenAI } from "@langchain/openai";
+import { runEqualizerInnerChain } from "@/utils/langchain/chains/inner";
+
+type StoredMessage = { type: string; data: { content: string } };
 
 export async function POST(request: Request) {
-  const res = await request.json();
-  const pastMessagesJsonString = res.pastMessages;
+  const body = (await request.json()) as { pastMessages?: string };
+  const pastMessagesJsonString = body.pastMessages;
 
   let chatHistory: Array<string | null> = [];
   let chatHistoryLines = "";
   if (pastMessagesJsonString && pastMessagesJsonString !== "undefined") {
-    const pastMessages: {
-      messages: Array<{ type: string; data: { content: string } }>;
-    } = JSON.parse(pastMessagesJsonString);
+    const pastMessages: { messages: StoredMessage[] } = JSON.parse(
+      pastMessagesJsonString
+    );
     chatHistory = pastMessages.messages
       .map((message) => {
         if (message.data.content) {
@@ -19,7 +21,6 @@ export async function POST(request: Request) {
             return `Human: ${message.data.content}`;
           } else {
             return null;
-            //return `AI: ${message.data.content}`;
           }
         } else {
           return null;
@@ -34,9 +35,13 @@ export async function POST(request: Request) {
   console.log("----- ----- -----");
   console.log(chatHistoryLines);
 
-  const model = new OpenAI({ temperature: 0 });
-  const chain = loadEqualizerInnerChain({ llm: model });
-  const result = await chain.call({
+  const model = new ChatOpenAI({
+    model: "gpt-4o-mini",
+    temperature: 0,
+    configuration: { fetch: globalThis.fetch },
+  });
+  const result = await runEqualizerInnerChain({
+    llm: model,
     chat_history: chatHistoryLines,
   });
   console.log(result.text);

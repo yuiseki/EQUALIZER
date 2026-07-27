@@ -18,8 +18,8 @@ export const AvatarIcon: React.FC<{ who: string }> = ({ who }) => {
     | undefined
   >();
   useEffect(() => {
-    if (userData && "user" in userData) {
-      setUser(userData.user);
+    if (userData && "user" in (userData as object)) {
+      setUser((userData as { user: typeof user }).user);
     }
   }, [userData]);
 

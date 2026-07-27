@@ -1,9 +1,8 @@
-import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
+import { getPrisma } from "@/lib/prisma";
 
 export async function GET(request: Request) {
+  const prisma = await getPrisma();
   const count = await prisma.conversation.count();
   const results = await prisma.conversation.findMany({
     select: {

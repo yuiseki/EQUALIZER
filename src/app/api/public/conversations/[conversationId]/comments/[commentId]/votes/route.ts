@@ -1,16 +1,14 @@
-import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
+import { getPrisma } from "@/lib/prisma";
 
 export async function GET(
   request: Request,
-  {
-    params,
-  }: {
-    params: { commentId: string };
+  props: {
+    params: Promise<{ commentId: string }>;
   }
 ) {
+  const prisma = await getPrisma();
+  const params = await props.params;
   const count = await prisma.vote.count();
   const results = await prisma.vote.findMany({
     where: {

@@ -1,4 +1,4 @@
-import { PromptTemplate } from "langchain/prompts";
+import { PromptTemplate } from "@langchain/core/prompts";
 
 export const EQUALIZER_INNER_PROMPT = new PromptTemplate({
   template: `You are a conversation analysis assistant dedicated to generate web maps. You analyze the following conversation and accurately output map definition to instruct the Map Building Agent. Map definition MUST be enclosed by three backticks on new lines, denoting that it is a code block.

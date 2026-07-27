@@ -1,22 +1,23 @@
-import { BaseLanguageModel } from "langchain/dist/base_language";
 import { EQUALIZER_SURFACE_PROMPT } from "./prompt";
-import { ConversationChain, LLMChain } from "langchain/chains";
-import { BaseMemory, BufferMemory } from "langchain/memory";
 
-export const loadEqualizerSurfaceChain = ({
+// A minimal structural type for the one method we use. Typing this against
+// @langchain/core's full `BaseChatModel<CallOptions>` generic class makes
+// TypeScript try to check ChatOpenAI's large call-options type against it and
+// blow the type-instantiation depth limit.
+interface InvokableChatModel {
+  invoke(input: string): Promise<{ content: unknown }>;
+}
+
+export const runEqualizerSurfaceChain = async ({
   llm,
-  memory,
+  input,
+  history,
 }: {
-  llm: BaseLanguageModel;
-  memory?: BaseMemory;
-}): LLMChain => {
-  if (memory === undefined) {
-    memory = new BufferMemory();
-  }
-  const chain = new ConversationChain({
-    llm: llm,
-    prompt: EQUALIZER_SURFACE_PROMPT,
-    memory: memory,
-  });
-  return chain;
+  llm: InvokableChatModel;
+  input: string;
+  history: string;
+}): Promise<{ response: string }> => {
+  const prompt = await EQUALIZER_SURFACE_PROMPT.format({ history, input });
+  const result = await llm.invoke(prompt);
+  return { response: String(result.content) };
 };

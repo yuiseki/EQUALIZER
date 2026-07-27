@@ -3,15 +3,22 @@ import { VoteToCommentView } from "@/components/VoteToCommentView";
 import { jsonFetcher } from "@/utils/jsonFetcher";
 import useSWR from "swr";
 import styles from "./styles.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { TweetButton } from "@/components/TweetButton";
 import { ConversationView } from "@/components/ConversationView";
 
-export default function Page({
-  params: { conversationId, commentId },
-}: {
-  params: { conversationId: string; commentId: string };
-}) {
+export default function Page(
+  props: {
+    params: Promise<{ conversationId: string; commentId: string }>;
+  }
+) {
+  const params = use(props.params);
+
+  const {
+    conversationId,
+    commentId
+  } = params;
+
   // initialize user
   const { data: userData, error: userDataError } = useSWR(
     "/api/auth/session",
@@ -26,8 +33,8 @@ export default function Page({
     | undefined
   >();
   useEffect(() => {
-    if (userData && "user" in userData) {
-      setUser(userData.user);
+    if (userData && "user" in (userData as object)) {
+      setUser((userData as { user: typeof user }).user);
     }
   }, [userData]);
 

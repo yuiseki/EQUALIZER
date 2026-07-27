@@ -4,7 +4,7 @@ import { jsonFetcher } from "@/utils/jsonFetcher";
 import { nextPostJson } from "@/utils/nextPostJson";
 import { scrollToBottom } from "@/utils/scrollBottom";
 import { sleep } from "@/utils/sleep";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, use } from "react";
 import useSWR from "swr";
 
 import styles from "./styles.module.css";
@@ -21,11 +21,17 @@ const greetingsBefore = `ようこそ。私は対話型熟議促進人類包摂�
 const greetingsAfter =
   "ぜひ、あなたの考えを教えてください。ご協力をお願いします！";
 
-export default function Page({
-  params: { conversationId },
-}: {
-  params: { conversationId: string };
-}) {
+export default function Page(
+  props: {
+    params: Promise<{ conversationId: string }>;
+  }
+) {
+  const params = use(props.params);
+
+  const {
+    conversationId
+  } = params;
+
   const { data: userData, error: userDataError } = useSWR(
     "/api/auth/session",
     jsonFetcher
@@ -39,8 +45,8 @@ export default function Page({
     | undefined
   >();
   useEffect(() => {
-    if (userData && "user" in userData) {
-      setUser(userData.user);
+    if (userData && "user" in (userData as object)) {
+      setUser((userData as { user: typeof user }).user);
     }
   }, [userData]);
 
@@ -124,7 +130,7 @@ ${greetingsAfter}`);
   );
   const [lazyInsertingInitialized, setLazyInsertingInitialized] =
     useState(false);
-  const [intervalId, setIntervalId] = useState<NodeJS.Timer>();
+  const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval>>();
   useEffect(() => {
     if (lazyInserting) {
       if (!lazyInsertingInitialized) {

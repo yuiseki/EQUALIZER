@@ -1,15 +1,17 @@
-import { LLMChain } from "langchain/chains";
 import { EQUALIZER_DEEP_PROMPT } from "./prompt";
-import { BaseLanguageModel } from "langchain/dist/base_language";
 
-export const loadEqualizerDeepChain = ({
+interface InvokableChatModel {
+  invoke(input: string): Promise<{ content: unknown }>;
+}
+
+export const runEqualizerDeepChain = async ({
   llm,
+  text,
 }: {
-  llm: BaseLanguageModel;
-}): LLMChain => {
-  const chain = new LLMChain({
-    llm: llm,
-    prompt: EQUALIZER_DEEP_PROMPT,
-  });
-  return chain;
+  llm: InvokableChatModel;
+  text: string;
+}): Promise<{ text: string }> => {
+  const prompt = await EQUALIZER_DEEP_PROMPT.format({ text });
+  const result = await llm.invoke(prompt);
+  return { text: String(result.content) };
 };

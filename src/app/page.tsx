@@ -35,8 +35,8 @@ export default function Home() {
     | undefined
   >();
   useEffect(() => {
-    if (userData && "user" in userData) {
-      setUser(userData.user);
+    if (userData && "user" in (userData as object)) {
+      setUser((userData as { user: typeof user }).user);
     }
   }, [userData]);
 
@@ -87,7 +87,7 @@ ${greetingsAfter}`);
   );
   const [lazyInsertingInitialized, setLazyInsertingInitialized] =
     useState(false);
-  const [intervalId, setIntervalId] = useState<NodeJS.Timer>();
+  const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval>>();
   useEffect(() => {
     if (lazyInserting) {
       if (!lazyInsertingInitialized) {

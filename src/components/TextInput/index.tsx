@@ -15,7 +15,7 @@ export const TextInput = ({
   inputText: string;
   setInputText: (inputText: string) => void;
   onSubmit: () => void;
-  textareaRef: RefObject<HTMLTextAreaElement>;
+  textareaRef: RefObject<HTMLTextAreaElement | null>;
 }) => {
   const onKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> =
     useCallback(

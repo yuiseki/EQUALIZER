@@ -1,12 +1,11 @@
-import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
-
-const prisma = new PrismaClient();
+import { buildAuthOptions } from "@/pages/api/auth/[...nextauth]";
+import { getPrisma } from "@/lib/prisma";
 
 export async function GET(request: Request) {
-  const session = await getServerSession(authOptions);
+  const prisma = await getPrisma();
+  const session = await getServerSession(await buildAuthOptions());
   if (!session) {
     console.warn("Not Authorized")
   }

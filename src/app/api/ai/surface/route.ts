@@ -1,40 +1,44 @@
 import { NextResponse } from "next/server";
-import { OpenAI } from "langchain/llms/openai";
-import { BufferMemory, ChatMessageHistory } from "langchain/memory";
-import { AIChatMessage, HumanChatMessage } from "langchain/schema";
-import { loadEqualizerSurfaceChain } from "@/utils/langchain/chains/surface";
+import { ChatOpenAI } from "@langchain/openai";
+import { runEqualizerSurfaceChain } from "@/utils/langchain/chains/surface";
+
+type StoredMessage = { type: "human" | "ai"; data: { content: string } };
 
 export async function POST(request: Request) {
-  const res = await request.json();
-  const query = res.query;
-  const pastMessagesJsonString = res.pastMessages;
+  const body = (await request.json()) as {
+    query?: string;
+    pastMessages?: string;
+  };
+  const query = body.query ?? "";
+  const pastMessagesJsonString = body.pastMessages;
 
-  let chatHistory = undefined;
+  let pastMessages: StoredMessage[] = [];
   if (pastMessagesJsonString && pastMessagesJsonString !== "undefined") {
-    const pastMessages: {
-      messages: Array<{ type: string; data: { content: string } }>;
-    } = JSON.parse(pastMessagesJsonString);
-
-    const chatHistoryMessages = pastMessages.messages.map((message) => {
-      if (message.data.content) {
-        if (message.type === "human") {
-          return new HumanChatMessage(message.data.content);
-        } else {
-          return new AIChatMessage(message.data.content);
-        }
-      } else {
-        return new HumanChatMessage("");
-      }
-    });
-    chatHistory = new ChatMessageHistory(chatHistoryMessages);
+    const parsed: { messages: StoredMessage[] } = JSON.parse(
+      pastMessagesJsonString
+    );
+    pastMessages = parsed.messages;
   }
-  const memory = new BufferMemory({
-    chatHistory,
-  });
 
-  const model = new OpenAI({ temperature: 0, maxTokens: 2000 });
-  const surfaceChain = loadEqualizerSurfaceChain({ llm: model, memory });
-  const surfaceResult = await surfaceChain.call({ input: query });
+  const history = pastMessages
+    .map((message) =>
+      message.type === "ai"
+        ? `AI: ${message.data.content}`
+        : `Human: ${message.data.content}`
+    )
+    .join("\n");
+
+  const model = new ChatOpenAI({
+    model: "gpt-4o-mini",
+    temperature: 0,
+    maxTokens: 2000,
+    configuration: { fetch: globalThis.fetch },
+  });
+  const surfaceResult = await runEqualizerSurfaceChain({
+    llm: model,
+    input: query,
+    history,
+  });
 
   console.log("----- ----- -----");
   console.log("----- surface -----");
@@ -43,9 +47,15 @@ export async function POST(request: Request) {
   console.log("AI:", surfaceResult.response);
   console.log("");
 
+  const newMessages: StoredMessage[] = [
+    ...pastMessages,
+    { type: "human", data: { content: query } },
+    { type: "ai", data: { content: surfaceResult.response } },
+  ];
+
   return NextResponse.json({
     query: query,
     surface: surfaceResult.response,
-    history: memory.chatHistory,
+    history: { messages: newMessages },
   });
 }

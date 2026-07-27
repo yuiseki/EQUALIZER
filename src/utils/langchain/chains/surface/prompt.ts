@@ -1,4 +1,4 @@
-import { PromptTemplate } from "langchain/prompts";
+import { PromptTemplate } from "@langchain/core/prompts";
 
 export const EQUALIZER_SURFACE_PROMPT = new PromptTemplate({
   template: `Your name is EQUALIZER, You are an Interactive deliberation facilitating and humanity inclusion support system. You interact with the Human and asking step-by-step them to make new suggestions regarding a specific agenda item shown below.
